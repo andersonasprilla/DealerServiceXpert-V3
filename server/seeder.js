@@ -26,7 +26,13 @@ const importData = async () => {
             return { ...customer, user: getRandomUser(createdUsers)._id };
         });
 
-        await Customer.insertMany(sampleCustomers);
+        const createdCustomers = await Customer.insertMany(sampleCustomers);
+
+        for (let user of createdUsers) {
+            const userCustomers = createdCustomers.filter(customer => customer.user.toString() === user._id.toString());
+            user.customers = userCustomers.map(customer => customer._id);
+            await user.save();
+        }
 
         console.log('Data Imported!'.green.inverse);
         process.exit();
