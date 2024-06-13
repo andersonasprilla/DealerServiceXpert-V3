@@ -44,6 +44,7 @@ const customerSchema = new mongoose.Schema({
         default: 'Drop Off',
     },
     status: {
+        required: true,
         type: String,
         enum: ['Checked In', 'Finished', 'Back Order'],
         default: 'Checked In',

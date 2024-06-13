@@ -6,7 +6,8 @@ const customers = [
         "vehicle": "Ridgeline 2019",
         "contact": "(305)-890-1234",
         "priority": "Waiter",
-        "description": "Oil change and tire rotation"
+        "description": "Oil change and tire rotation",
+        "status": "Checked In"
     },
     {
         "hatNumber": "6210",
@@ -15,7 +16,8 @@ const customers = [
         "vehicle": "Civic 2018",
         "contact": "(305)-891-2345",
         "priority": "Drop Off",
-        "description": "Check engine light"
+        "description": "Check engine light",
+        "status": "Checked In"
     },
     {
         "hatNumber": "6211",
@@ -24,7 +26,8 @@ const customers = [
         "vehicle": "Accord 2020",
         "contact": "(305)-892-3456",
         "priority": "Waiter",
-        "description": "Noise over bumps"
+        "description": "Noise over bumps",
+        "status": "Checked In"
     },
     {
         "hatNumber": "6212",
@@ -33,7 +36,8 @@ const customers = [
         "vehicle": "Pilot 2021",
         "contact": "(305)-893-4567",
         "priority": "Drop Off",
-        "description": "Brake inspection"
+        "description": "Brake inspection",
+        "status": "Checked In"
     },
     {
         "hatNumber": "6213",
@@ -42,7 +46,8 @@ const customers = [
         "vehicle": "CR-V 2017",
         "contact": "(305)-894-5678",
         "priority": "Waiter",
-        "description": "Battery replacement"
+        "description": "Battery replacement",
+        "status": "Checked In"
     },
     {
         "hatNumber": "6214",
@@ -51,7 +56,8 @@ const customers = [
         "vehicle": "Odyssey 2016",
         "contact": "(305)-895-6789",
         "priority": "Drop Off",
-        "description": "Air conditioning issue"
+        "description": "Air conditioning issue",
+        "status": "Checked In"
     },
     {
         "hatNumber": "6215",
@@ -60,7 +66,8 @@ const customers = [
         "vehicle": "Fit 2015",
         "contact": "(305)-896-7890",
         "priority": "Waiter",
-        "description": "Tire replacement"
+        "description": "Tire replacement",
+        "status": "Checked In"
     },
     {
         "hatNumber": "6216",
@@ -69,7 +76,8 @@ const customers = [
         "vehicle": "Insight 2021",
         "contact": "(305)-897-8901",
         "priority": "Drop Off",
-        "description": "Transmission issue"
+        "description": "Transmission issue",
+        "status": "Checked In"
     },
     {
         "hatNumber": "6217",
@@ -78,7 +86,8 @@ const customers = [
         "vehicle": "Passport 2022",
         "contact": "(305)-898-9012",
         "priority": "Waiter",
-        "description": "Windshield wiper replacement"
+        "description": "Windshield wiper replacement",
+        "status": "Checked In"
     },
     {
         "hatNumber": "6218",
@@ -87,7 +96,8 @@ const customers = [
         "vehicle": "HR-V 2020",
         "contact": "(305)-899-0123",
         "priority": "Drop Off",
-        "description": "Steering wheel alignment"
+        "description": "Steering wheel alignment",
+        "status": "Checked In"
     }
 ]
 
