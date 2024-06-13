@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import capitalizeName from "../utils/capitalizeName.js";
+import mongoose, { version } from "mongoose";
+import capitalizeName from "../middleware/capitalizeName.js";
 
 const userSchema = new mongoose.Schema({
 
@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
         ref: 'Customer',
     }],
 
-}, { timestamps: true });
+}, { timestamps: true, versionKey: false });
 
 const User = mongoose.model('User', userSchema);
 
