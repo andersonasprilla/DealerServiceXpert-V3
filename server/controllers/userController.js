@@ -1,6 +1,6 @@
 import asyncHandler from "../middleware/asyncHandler.js";
 import User from "../models/userModel.js";
-import jwt from "jsonwebtoken";
+import generateToken from "../utils/generateToken.js";
 
 // @desc    Login user
 // @route   POST /api/users/login
@@ -15,16 +15,7 @@ const loginUser = asyncHandler(async (req, res) => {
     // Check if user exists and the password is correct
     if (user && (await user.matchPassword(password))) {
         // Generate a JWT token with the user ID as payload
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-            expiresIn: '12h', // Token expires in 12 hours
-        });
-        // Set the JWT as an Http-Only cookie
-        res.cookie('jwt', token, {
-            httpOnly: true, // Cookie is accessible only by the web server
-            secure: process.env.NODE_ENV !== 'development', // Use secure flag in production
-            sameSite: 'strict', // Prevents the browser from sending this cookie along with cross-site requests
-            maxAge: 43200000, // Cookie expires in 12 hours
-        });
+        generateToken(res, user._id);
         // Send back user information (excluding sensitive data)
         res.json({
             _id: user._id,
