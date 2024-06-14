@@ -1,29 +1,22 @@
 import asyncHandler from "../middleware/asyncHandler.js";
 import User from "../models/userModel.js";
-import jwt from "jsonwebtoken";
+import generateToken from "../utils/generateToken.js";
 
 // @desc    Login user
 // @route   POST /api/users/login
 // @access  Public
 const loginUser = asyncHandler(async (req, res) => {
+    // Extract email and password from the request body
     const { email, password } = req.body;
 
+    // Find the user in the database by email
     const user = await User.findOne({ email });
 
-    if(user && (await user.matchPassword(password))) {
-
-        const token = jwt.sign({ userId: user._id}, process.env.JWT_SECRET, {
-            expiresIn: '12h',
-        });
-
-        //Set JWT as Http-Only cookie
-        res.cookie('jwt', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV !== 'development',
-            sameSite: 'strict',
-            maxAge: 43200000, //12 hours
-        });
-
+    // Check if user exists and the password is correct
+    if (user && (await user.matchPassword(password))) {
+        // Generate a JWT token with the user ID as payload
+        generateToken(res, user._id);
+        // Send back user information (excluding sensitive data)
         res.json({
             _id: user._id,
             username: user.username,
@@ -31,6 +24,7 @@ const loginUser = asyncHandler(async (req, res) => {
             role: user.role,
         });
     } else {
+        // If authentication fails, send a 401 status and an error message
         res.status(401);
         throw new Error('Invalid email or password');
     }
@@ -40,19 +34,51 @@ const loginUser = asyncHandler(async (req, res) => {
 // @route   POST /api/users/logout
 // @access  Private
 const logoutUser = asyncHandler(async (req, res) => {
+    // Set the JWT cookie to an empty string and expire it immediately
     res.cookie('jwt', '', {
-        httpOnly: true,
-        expires: new Date(0),
+        httpOnly: true, // Cookie is accessible only by the web server
+        expires: new Date(0), // Expire the cookie immediately
     });
 
-    res.status(200).json({ message: 'Logged out successfully' })
+    // Send a success response indicating the user has been logged out
+    res.status(200).json({ message: 'Logged out successfully' });
 });
+
 
 // @desc    Register a new user
 // @route   POST /api/users
 // @access  Private/Manager
 const registerUser = asyncHandler(async (req, res) => {
-    res.send('Register Route');
+    const { username, email, password, role } = req.body;
+
+    // Check if the user already exists
+    const userExists = await User.findOne({ email });
+
+    if (userExists) {
+        res.status(400);
+        throw new Error('User already exists');
+    }
+
+    // Create a new user
+    const user = await User.create({
+        username,
+        email,
+        password,
+        role,
+    });
+
+    // If the user is created successfully, send back the user information
+    if (user) {
+        res.status(201).json({
+            _id: user._id,
+            username: user.username,
+            email: user.email,
+            role: user.role,
+        });
+    } else {
+        res.status(400);
+        throw new Error('Invalid user data');
+    }
 });
 
 // @desc    Get users
