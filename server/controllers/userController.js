@@ -85,7 +85,13 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route   GET /api/users
 // @access  Private/Manager
 const getUsers = asyncHandler(async (req, res) => {
-    res.send('Get Users Route');
+    const users = await User.find({}).select('-customers');
+    if (users) {
+        res.json(users);
+    } else {
+        res.status(404);
+        throw new Error('No users found');
+    }
 });
 
 // @desc    Get user by ID  
