@@ -3,24 +3,30 @@ import Customer from "../models/customerModel.js";
 
 // @desc    Fetch all customers
 // @route   GET /api/customers
-// @access  Public
+// @access  Private
 const getCustomers = asyncHandler(async (req, res) => {
-    const customers = await Customer.find({});
-    res.json(customers);
+    res.send('Get all customers');
 });
 
 // @desc    Fetch single customer
 // @route   GET /api/customers/:id
-// @access  Public
+// @access  Private
 const getCustomerById = asyncHandler(async (req, res) => {
-    const customer = await Customer.findById(req.params.id);
-
-    if(customer) {
-        return res.json(customer);
-    } else {
-        res.status(404)
-        throw new Error('Resource not found');
-    }
+    res.send('Get a customer by id');
 });
 
-export { getCustomers, getCustomerById };
+// @desc    Create a customer
+// @route   POST /api/customers
+// @access  Private
+const createCustomer = asyncHandler(async (req, res) => {
+    res.send('Create a customer');
+});
+
+// @desc    Update a customer
+// @route   PUT /api/customers/:id
+// @access  Private
+const updateCustomer = asyncHandler(async (req, res) => {
+    res.send('Update a customer');
+});
+
+export { getCustomers, getCustomerById, createCustomer, updateCustomer };
