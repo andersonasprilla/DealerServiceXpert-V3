@@ -12,7 +12,14 @@ const users = [
         email: 'anica@gmail.com',
         role : 'Service Advisor',
         password : bcrypt.hashSync('123456', 10),
+    },
+    {
+        username: 'John Boss',
+        email: 'boss@gmail.com',
+        role : 'Manager',
+        password : bcrypt.hashSync('123456', 10),
     }
+
 ];
 
 export default users;

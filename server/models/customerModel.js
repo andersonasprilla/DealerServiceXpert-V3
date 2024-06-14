@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import capitalizeName from "../utils/capitalizeName.js";
+import capitalizeName from "../middleware/capitalizeName.js";
 
 const customerSchema = new mongoose.Schema({
 
@@ -50,9 +50,9 @@ const customerSchema = new mongoose.Schema({
         default: 'Checked In',
     },
 
-}  , { timestamps: true }); // Adds createdAt and updatedAt fields
+}, { timestamps: true, versionKey: false }); 
 
-    const Customer = mongoose.model('Customer', customerSchema);
+const Customer = mongoose.model('Customer', customerSchema);
 
-    export default Customer;
+export default Customer;
 

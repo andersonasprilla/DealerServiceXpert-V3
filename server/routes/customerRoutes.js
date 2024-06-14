@@ -1,17 +1,14 @@
 import express from 'express';
 const router = express.Router();
-import asyncHandler from '../middleware/asyncHandler.js';
-import Customer from '../models/customerModel.js';
+import {
+    getCustomers,
+    getCustomerById,
+    createCustomer,
+    updateCustomer
+} from '../controllers/customerController.js';
+import { protect } from '../middleware/authMiddleware.js';
 
-router.get('/', asyncHandler(async (req, res) => {
-    const customers = await Customer.find({});
-    res.json(customers);
-    }));
-
-router.get('/:id', asyncHandler(async (req, res) => {
-    const customer = await Customer.findById(req.params.id);
-    res.json(customer);
-    }
-));
+router.route('/').get(protect, getCustomers).post(protect, createCustomer);
+router.route('/:id').get(protect, getCustomerById).put(protect, updateCustomer);
 
 export default router;
