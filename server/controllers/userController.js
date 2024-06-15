@@ -17,7 +17,7 @@ const loginUser = asyncHandler(async (req, res) => {
         // Generate a JWT token with the user ID as payload
         generateToken(res, user._id);
         // Send back user information (excluding sensitive data)
-        res.json({
+        res.status(200).json({
             _id: user._id,
             username: user.username,
             email: user.email,
@@ -85,28 +85,79 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route   GET /api/users
 // @access  Private/Manager
 const getUsers = asyncHandler(async (req, res) => {
-    res.send('Get Users Route');
+    // Find all users and exclude the customers and password from the response
+    const users = await User.find({}).select('-customers').select('-password');
+    if (users) {
+        res.status(200).json(users);
+    } else {
+        res.status(404);
+        throw new Error('No users found');
+    }
 });
 
 // @desc    Get user by ID  
 // @route   GET /api/users/:id
 // @access  Private/Manager
 const getUserById = asyncHandler(async (req, res) => {
-    res.send('Get User by ID Route');
+    // Find the user by ID and exclude the password from the response
+    const user = await User.findById(req.params.id).select('-password');;
+
+    // If the user exists, send back the user information
+    if (user) {
+        res.status(200).json(user);
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
 });
 
 // @desc    Update user 
 // @route   PUT /api/users/:id
 // @access  Private/Manager
 const updateUser = asyncHandler(async (req, res) => {
-    res.send('Update User Route');
+    // Find the user by ID
+    const user = await User.findById(req.params.id);
+
+    // If the user exists, update the user information
+    if (user) {
+        user.username = req.body.username || user.username;
+        user.email = req.body.email || user.email;
+        user.role = req.body.role || user.role;
+
+        // Save the updated user information
+        const updatedUser = await user.save();
+
+        // Send back the updated user information
+        res.status(200).json({
+            username: updatedUser.username,
+            email: updatedUser.email,
+            role: updatedUser.role,
+        });
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
 });
 
 // @desc    Delete user
 // @route   DELETE /api/users/:id
 // @access  Private/Manager
 const deleteUser = asyncHandler(async (req, res) => {
-    res.send('Delete User Route');
+    // Find the user by ID
+    const user = await User.findById(req.params.id);
+
+    // If the user does not exists 
+    if (!user) {
+        res.status(404);
+        throw new Error('User not found');
+    }
+
+    // Delete the user
+    await User.findByIdAndDelete(req.params.id);
+
+    // Send a success response
+    res.status(200).json({ message: 'User removed' });
+    
 });
 
 export { 

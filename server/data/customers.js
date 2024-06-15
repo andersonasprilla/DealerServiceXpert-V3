@@ -7,7 +7,7 @@ const customers = [
         "contact": "(305)-890-1234",
         "priority": "Waiter",
         "description": "Oil change and tire rotation",
-        "status": "Checked In"
+        "status": "Checked In!"
     },
     {
         "hatNumber": "6210",
@@ -17,7 +17,7 @@ const customers = [
         "contact": "(305)-891-2345",
         "priority": "Drop Off",
         "description": "Check engine light",
-        "status": "Checked In"
+        "status": "Checked In!"
     },
     {
         "hatNumber": "6211",
@@ -27,7 +27,7 @@ const customers = [
         "contact": "(305)-892-3456",
         "priority": "Waiter",
         "description": "Noise over bumps",
-        "status": "Checked In"
+        "status": "Checked In!"
     },
     {
         "hatNumber": "6212",
@@ -37,7 +37,7 @@ const customers = [
         "contact": "(305)-893-4567",
         "priority": "Drop Off",
         "description": "Brake inspection",
-        "status": "Checked In"
+        "status": "Checked In!"
     },
     {
         "hatNumber": "6213",
@@ -47,7 +47,7 @@ const customers = [
         "contact": "(305)-894-5678",
         "priority": "Waiter",
         "description": "Battery replacement",
-        "status": "Checked In"
+        "status": "Checked In!"
     },
     {
         "hatNumber": "6214",
@@ -57,7 +57,7 @@ const customers = [
         "contact": "(305)-895-6789",
         "priority": "Drop Off",
         "description": "Air conditioning issue",
-        "status": "Checked In"
+        "status": "Checked In!"
     },
     {
         "hatNumber": "6215",
@@ -67,7 +67,7 @@ const customers = [
         "contact": "(305)-896-7890",
         "priority": "Waiter",
         "description": "Tire replacement",
-        "status": "Checked In"
+        "status": "Checked In!"
     },
     {
         "hatNumber": "6216",
@@ -77,7 +77,7 @@ const customers = [
         "contact": "(305)-897-8901",
         "priority": "Drop Off",
         "description": "Transmission issue",
-        "status": "Checked In"
+        "status": "Checked In!"
     },
     {
         "hatNumber": "6217",
@@ -87,7 +87,7 @@ const customers = [
         "contact": "(305)-898-9012",
         "priority": "Waiter",
         "description": "Windshield wiper replacement",
-        "status": "Checked In"
+        "status": "Checked In!"
     },
     {
         "hatNumber": "6218",
@@ -97,7 +97,7 @@ const customers = [
         "contact": "(305)-899-0123",
         "priority": "Drop Off",
         "description": "Steering wheel alignment",
-        "status": "Checked In"
+        "status": "Checked In!"
     }
 ]
 
