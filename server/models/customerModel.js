@@ -46,8 +46,8 @@ const customerSchema = new mongoose.Schema({
     status: {
         required: true,
         type: String,
-        enum: ['Checked In', 'Finished', 'Back Order'],
-        default: 'Checked In',
+        enum: ['Checked In!', 'Finished', 'Special Order', 'Back Order'],
+        default: 'Checked In!',
     },
 
 }, { timestamps: true, versionKey: false }); 
