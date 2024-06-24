@@ -12,6 +12,9 @@ const generateToken = (res, userId) => {
         sameSite : 'strict', // Prevents the browser from sending this cookie along with cross-site requests
         maxAge : 43200000, // Cookie expires in 12 hours
     });
+    //this IS MUST
+    //there should be access token, like this one that you created, and refresh token, who is similar to this one
+    //but have longer lifetime
 }
 
 export default generateToken;

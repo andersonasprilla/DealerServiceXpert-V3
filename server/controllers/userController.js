@@ -13,21 +13,21 @@ const loginUser = asyncHandler(async (req, res) => {
     const user = await User.findOne({ email });
 
     // Check if user exists and the password is correct
-    if (user && (await user.matchPassword(password))) {
-        // Generate a JWT token with the user ID as payload
-        generateToken(res, user._id);
-        // Send back user information (excluding sensitive data)
-        res.status(200).json({
-            _id: user._id,
-            username: user.username,
-            email: user.email,
-            role: user.role,
-        });
-    } else {
-        // If authentication fails, send a 401 status and an error message
-        res.status(401);
-        throw new Error('Invalid email or password');
+    const doPasswordsMatch = await user.matchPassword(password);//await in if is not good practice. Extract that in variable
+    if (!user || !doPasswordsMatch) {
+    // If authentication fails, send a 401 status and an error message
+    res.status(401);
+    throw new Error('Invalid email or password');
     }
+    // Generate a JWT token with the user ID as payload
+    generateToken(res, user._id);
+    // Send back user information (excluding sensitive data)
+    res.status(200).json({
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+    });
 });
 
 // @desc    Logout user / clear cookie
@@ -39,6 +39,8 @@ const logoutUser = asyncHandler(async (req, res) => {
         httpOnly: true, // Cookie is accessible only by the web server
         expires: new Date(0), // Expire the cookie immediately
     });
+    //if we want to delete many cookies, how we gonna do that?
+    //there is a method to clear all cookies
 
     // Send a success response indicating the user has been logged out
     res.status(200).json({ message: 'Logged out successfully' });
@@ -118,25 +120,25 @@ const updateUser = asyncHandler(async (req, res) => {
     // Find the user by ID
     const user = await User.findById(req.params.id);
 
-    // If the user exists, update the user information
-    if (user) {
-        user.username = req.body.username || user.username;
-        user.email = req.body.email || user.email;
-        user.role = req.body.role || user.role;
-
-        // Save the updated user information
-        const updatedUser = await user.save();
-
-        // Send back the updated user information
-        res.status(200).json({
-            username: updatedUser.username,
-            email: updatedUser.email,
-            role: updatedUser.role,
-        });
-    } else {
+    if (!user) {
         res.status(404);
         throw new Error('User not found');
     }
+
+    // If the user exists, update the user information
+    user.username = req.body.username || user.username;
+    user.email = req.body.email || user.email;
+    user.role = req.body.role || user.role;
+
+    // Save the updated user information
+    const updatedUser = await user.save();
+
+    // Send back the updated user information
+    res.status(200).json({
+        username: updatedUser.username,
+        email: updatedUser.email,
+        role: updatedUser.role,
+    });
 });
 
 // @desc    Delete user

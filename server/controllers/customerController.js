@@ -56,15 +56,12 @@ const createCustomer = asyncHandler(async (req, res) => {
         priority: priority || req.user.priority,
         status: req.user.status,
       });
-
-    // If the customer is created successfully, send back the customer information
-    if (customer) {
-        res.status(201).json(customer);
-    }
-    else {
+    if (!customer) {
         res.status(400);
         throw new Error('Invalid customer data');
     }
+    // If the customer is created successfully, send back the customer information
+    res.status(201).json(customer);
 });
 
 // @desc    Update a customer
@@ -74,25 +71,24 @@ const updateCustomer = asyncHandler(async (req, res) => {
     // Find the customer by ID
     const customer = await Customer.findById(req.params.id);
 
-    // If the customer exists, update the customer information
-    if (customer) {
-        customer.hatNumber = req.body.hatNumber || customer.hatNumber;
-        customer.repairOrder = req.body.repairOrder || customer.repairOrder;
-        customer.customerName = req.body.customerName || customer.customerName;
-        customer.vehicle = req.body.vehicle || customer.vehicle;
-        customer.description = req.body.description || customer.description;
-        customer.contact = req.body.contact || customer.contact;
-        customer.priority = req.body.priority || customer.priority;
-        customer.status = req.body.status || customer.status;
-
-        // Save the updated customer information
-        const updatedCustomer = await customer.save();
-        res.status(200).json(updatedCustomer);
-    }
-    else {
+    if (!customer) {
         res.status(404);
         throw new Error('Customer not found');
     }
+
+    // If the customer exists, update the customer information
+    customer.hatNumber = req.body.hatNumber || customer.hatNumber;
+    customer.repairOrder = req.body.repairOrder || customer.repairOrder;
+    customer.customerName = req.body.customerName || customer.customerName;
+    customer.vehicle = req.body.vehicle || customer.vehicle;
+    customer.description = req.body.description || customer.description;
+    customer.contact = req.body.contact || customer.contact;
+    customer.priority = req.body.priority || customer.priority;
+    customer.status = req.body.status || customer.status;
+
+    // Save the updated customer information
+    const updatedCustomer = await customer.save();
+    res.status(200).json(updatedCustomer);
 });
 
 export { getCustomers, getCustomerById, createCustomer, updateCustomer };

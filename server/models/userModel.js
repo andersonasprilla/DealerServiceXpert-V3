@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema({
 
 // Method to compare entered password with the hashed password in the database
 userSchema.methods.matchPassword = async function (enteredPassword) {
-    return await bcrypt.compare(enteredPassword, this.password);
+    return await bcrypt.compare(enteredPassword, this.password);//brcypt is abandoned, should use argon2
 };
 
 // Middleware to hash the password before saving a user document

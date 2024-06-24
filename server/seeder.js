@@ -42,7 +42,8 @@ const importData = async () => {
             user.customers = userCustomers.map(customer => customer._id);
             await user.save(); // Save the updated user
         }
-
+        //things like this should go in Promise.all since with want to call all of this in parallel instead of a sequance 
+            
         console.log('Data Imported!'.green.inverse); // Log success message
         process.exit(); // Exit the process
     } catch (error) {
