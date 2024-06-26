@@ -22,11 +22,10 @@ const getRandomUser = (users) => {
 const importData = async () => {
     try {
         // Delete all existing users and customers from the database
-        await User.deleteMany();
-        await Customer.deleteMany();
+        await Promise.all([User.deleteMany(), Customer.deleteMany()]);
 
         // Insert the sample users into the database
-        const createdUsers = await User.insertMany(users);
+        const createdUsers = await User.insertMany(await users());
 
         // Map the sample customers, assigning a random user to each customer
         const sampleCustomers = customers.map((customer) => {
@@ -36,14 +35,13 @@ const importData = async () => {
         // Insert the sample customers into the database
         const createdCustomers = await Customer.insertMany(sampleCustomers);
 
-        // For each created user, find their customers and update the user's customers field
-        for (let user of createdUsers) {
+        // Update each user's customers field in parallel
+        await Promise.all(createdUsers.map(async (user) => {
             const userCustomers = createdCustomers.filter(customer => customer.user.toString() === user._id.toString());
             user.customers = userCustomers.map(customer => customer._id);
             await user.save(); // Save the updated user
-        }
-        //things like this should go in Promise.all since with want to call all of this in parallel instead of a sequance 
-            
+        }));
+
         console.log('Data Imported!'.green.inverse); // Log success message
         process.exit(); // Exit the process
     } catch (error) {
@@ -56,8 +54,7 @@ const importData = async () => {
 const destroyData = async () => {
     try {
         // Delete all existing users and customers from the database
-        await User.deleteMany();
-        await Customer.deleteMany();
+        await Promise.all([User.deleteMany(), Customer.deleteMany()]);
 
         console.log('Data Destroyed!'.red.inverse); // Log success message
         process.exit(); // Exit the process

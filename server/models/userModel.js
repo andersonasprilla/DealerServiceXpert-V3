@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
 import capitalizeName from "../middleware/capitalizeName.js";
-import bcrypt from "bcryptjs";
+import argon2 from 'argon2'; 
 
 const userSchema = new mongoose.Schema({
-
     username: {
         required: true,
         type: String,
@@ -30,24 +29,26 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Customer',
     }],
-
 }, { timestamps: true, versionKey: false });
 
-// Method to compare entered password with the hashed password in the database
 userSchema.methods.matchPassword = async function (enteredPassword) {
-    return await bcrypt.compare(enteredPassword, this.password);//brcypt is abandoned, should use argon2
+    return await argon2.verify(this.password, enteredPassword);
 };
 
 // Middleware to hash the password before saving a user document
 userSchema.pre('save', async function (next) {
     // If the password field is not modified, move to the next middleware
     if (!this.isModified('password')) {
-        next();
+        return next();
     }
-    // Generate a salt for hashing the password
-    const salt = await bcrypt.genSalt(10);
-    // Hash the password using the generated salt
-    this.password = await bcrypt.hash(this.password, salt);
+    
+    try {
+        // Hash the password using argon2
+        this.password = await argon2.hash(this.password);
+        next();
+    } catch (err) {
+        next(err);
+    }
 });
 
 const User = mongoose.model('User', userSchema);
