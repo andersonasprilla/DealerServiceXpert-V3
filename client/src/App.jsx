@@ -23,7 +23,7 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import Customer from './components/Customer/Customer'
+import Customer from './components/Customer/CustomerInfo'
 
 
 const navigation = [

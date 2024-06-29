@@ -1,8 +1,10 @@
+import React from 'react';
 import {
   Card,
   CardBody,
   Typography,
 } from "@material-tailwind/react";
+import Dropdown from "./Dropdown";
 
 const customers = [
   {
@@ -30,7 +32,7 @@ const keyMapping = {
   status: "Status"
 };
 
-const Customer = () => {
+const CustomerInfo = () => {
   return (
     <Card>
       <CardBody>
@@ -39,7 +41,11 @@ const Customer = () => {
             {Object.entries(customer).map(([key, value]) => (
               <div key={key}>
                 <Typography className="font-bold mb-1">{keyMapping[key] || key}</Typography>
-                <Typography>{value}</Typography>
+                {key === 'status' && value === 'Checked In!' ? (
+                  <Dropdown />
+                ) : (
+                  <Typography>{value}</Typography>
+                )}
               </div>
             ))}
           </div>
@@ -49,4 +55,4 @@ const Customer = () => {
   );
 }
 
-export default Customer;
+export default CustomerInfo;
