@@ -291,7 +291,34 @@ export default function Example() {
           </div>
 
           <main className="py-10">
-            <div className="px-4 sm:px-6 lg:px-8">{< Customer />}</div>
+            <div className="px-4 sm:px-6 lg:px-8">{
+              <>
+              < Customer />
+              < Customer />
+              < Customer />
+              < Customer />
+              < Customer />
+              < Customer />
+              < Customer />
+              < Customer />
+              < Customer />
+              < Customer />
+              < Customer />
+              < Customer />
+              < Customer />
+              < Customer />
+              < Customer />
+              < Customer />
+              < Customer />
+              < Customer />
+              < Customer />
+              < Customer />
+              < Customer />
+              < Customer />
+              < Customer />
+              < Customer />
+              </>
+              }</div>
           </main>
         </div>
       </div>

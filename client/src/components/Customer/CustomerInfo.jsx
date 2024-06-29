@@ -1,8 +1,11 @@
-import React from 'react';
+import { useState } from 'react';
 import {
   Card,
   CardBody,
   Typography,
+  Accordion,
+  AccordionHeader,
+  AccordionBody
 } from "@material-tailwind/react";
 import Dropdown from "./Dropdown";
 import getStatusColors from '../../helper/getStatusColors';
@@ -34,25 +37,38 @@ const keyMapping = {
 };
 
 const CustomerInfo = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleOpen = () => setIsOpen((prev) => !prev);
+
   return (
-    <Card>
-      <CardBody>
-        {customers.map((customer, i) => (
-          <div key={i} className="flex flex-cols-2 gap-4 mb-4 justify-between">
-            {Object.entries(customer).map(([key, value]) => (
-              <div key={key}>
-                <Typography className="font-bold mb-1">{keyMapping[key] || key}</Typography>
-                {key === 'status' && value === 'Checked In!' ? (
-                  <Dropdown />
-                ) : (
-                  <Typography>{value}</Typography>
-                )}
-              </div>
-            ))}
-          </div>
-        ))}
-      </CardBody>
-    </Card>
+    <>
+      <Card className='mt-2'>
+        <Accordion open={isOpen}>
+          <AccordionHeader onClick={handleOpen} className='border-b-0'>
+            <CardBody className='py-2 w-full'>
+              {customers.map((customer, i) => (
+                <div key={i} className="flex flex-cols-2 gap-4 mb-4 justify-between ">
+                  {Object.entries(customer).map(([key, value]) => (
+                    <div key={key}>
+                      <Typography className="mb-1">{keyMapping[key] || key}</Typography>
+                      {key === 'status' && value === 'Checked In!' ? (
+                        <Dropdown />
+                      ) : (
+                        <Typography className=' font-semibold'>{value}</Typography>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </CardBody>
+          </AccordionHeader >
+          <AccordionBody >
+            Edit Customer
+          </AccordionBody>
+        </Accordion>
+      </Card>
+    </>
   );
 }
 

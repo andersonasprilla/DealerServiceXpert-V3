@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const Dropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [status, setStatus] = useState('Checked In!');
+  const [status, setStatus] = useState('Checked In');
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -20,7 +20,7 @@ const Dropdown = () => {
         data-ripple-light="true"
         data-popover-target="menu-1"
         data-popover-nested="true"
-        className="select-none rounded-lg bg-gray-900 py-1 px-6 text-center align-middle font-sans text-xs font-bold  text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+        className=" select-none rounded-lg  bg-gray-900 py-1 px-6 text-center align-middle font-sans text-xs font-bold  text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
       >
         {status}
       </button>
