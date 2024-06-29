@@ -5,6 +5,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import Dropdown from "./Dropdown";
+import getStatusColors from '../../helper/getStatusColors';
 
 const customers = [
   {
