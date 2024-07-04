@@ -8,7 +8,7 @@ const Layout = ({ children }) => {
     const [sidebarOpen, setSidebarOpen] = useState(false); // State to control the visibility of the mobile sidebar
 
     return (
-        <div>
+        <>
             {/* Mobile sidebar, controlled by sidebarOpen state */}
             <MobileSidebar open={sidebarOpen} setOpen={setSidebarOpen} />
             {/* Sidebar for larger screens */}
@@ -23,7 +23,7 @@ const Layout = ({ children }) => {
                     </div>
                 </main>
             </div>
-        </div>
+        </>
     );
 };
 
