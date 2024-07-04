@@ -2,6 +2,11 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { userNavigation } from '../../utils/constants'; 
 
+// Function to concatenate class names
+function classNames(...classes) {
+    return classes.filter(Boolean).join(' ');
+}
+
 // Navbar component
 const Navbar = ({ setSidebarOpen }) => {
   return (
