@@ -36,35 +36,38 @@ const keyMapping = {
   status: "Status"
 };
 
-const CustomerInfo = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const CustomerMainCard = () => {
+  const [isOpen, setIsOpen] = useState(false); // State to control the accordion open/close status
 
-  const handleOpen = () => setIsOpen((prev) => !prev);
+  const handleOpen = () => setIsOpen((prev) => !prev); // Toggle function for the accordion
 
   return (
     <>
+      {/* Main card component */}
       <Card className='mt-2'>
         <Accordion open={isOpen}>
           <AccordionHeader onClick={handleOpen} className='border-b-0'>
             <CardBody className='py-2 w-full'>
+              {/* Mapping through customers array */}
               {customers.map((customer, i) => (
-                <div key={i} className="flex flex-cols-2 gap-4 mb-4 justify-between ">
+                <div key={i} className="flex flex-cols-2 gap-4 mb-4 justify-between">
+                  {/* Mapping through each customer object */}
                   {Object.entries(customer).map(([key, value]) => (
                     <div key={key}>
                       <Typography className="mb-1">{keyMapping[key] || key}</Typography>
                       {key === 'status' && value === 'Checked In!' ? (
-                        <Dropdown />
+                        <Dropdown /> // Render dropdown if the status is "Checked In!"
                       ) : (
-                        <Typography className=' font-semibold'>{value}</Typography>
+                        <Typography className='font-semibold'>{value}</Typography>
                       )}
                     </div>
                   ))}
                 </div>
               ))}
             </CardBody>
-          </AccordionHeader >
-          <AccordionBody >
-            Edit Customer
+          </AccordionHeader>
+          <AccordionBody>
+            Edit Customer {/*Future implementation*/}
           </AccordionBody>
         </Accordion>
       </Card>
@@ -72,4 +75,5 @@ const CustomerInfo = () => {
   );
 }
 
-export default CustomerInfo;
+
+export default CustomerMainCard;
