@@ -1,5 +1,5 @@
-import Layout from "./components/Layout/Layout";
-import Container from "./components/Container/Container";
+import ServiceAdvisorScreen from "./screens/ServiceAdvisorScreen";
+import ManagerScreen from "./screens/ManagerScreen";
 
 
 const customerData = [
@@ -60,15 +60,33 @@ const customerData = [
   },
 ];
 
+const userData = [
+  {
+    username: 'Luis Asprilla',
+    email: 'luis@gmail.com',
+    role: 'Service Advisor',
+},
+{
+    username: 'Anica Barrios',
+    email: 'anica@gmail.com',
+    role: 'Service Advisor',
+},
+{
+    username: 'John Boss',
+    email: 'boss@gmail.com',
+    role: 'Manager',
+}
+];
+
 const App = () => {
   return (
-    <Layout>
-      {/* Map over customerData and render Container for each customer */}
-      {customerData.map((customer, index) => (
-        <Container key={index} data={customer} />
-      ))}
-    </Layout>
-  );
+    <>
+    {/* Render only the screen of the corresponding logged in user */}
+    <ServiceAdvisorScreen customerData={customerData} />
+    {/* <ManagerScreen userData={userData} /> */}
+    </>
+        
+  )
 };
 
 export default App;
