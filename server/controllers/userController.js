@@ -77,6 +77,24 @@ const getUsers = [protect, manager, asyncHandler(async (req, res) => {
     }
 })];
 
+// @desc    Get current user
+// @route   GET /api/users/me
+// @access  Private
+const getCurrentUser = [protect, asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id).select('-password');
+    if (user) {
+        res.status(200).json({
+            _id: user._id,
+            username: user.username,
+            email: user.email,
+            role: user.role,
+        });
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
+})];
+
 // @desc    Get user by ID
 // @route   GET /api/users/:id
 // @access  Private/Manager
@@ -138,5 +156,6 @@ export {
     getUsers,
     getUserById,
     updateUser,
-    deleteUser
+    deleteUser,
+    getCurrentUser,
 };

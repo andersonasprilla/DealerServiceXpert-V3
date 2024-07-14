@@ -9,6 +9,7 @@ import {
 } from "@material-tailwind/react";
 import Dropdown from "./Dropdown.jsx";
 import formatFieldName from "../../helper/formatFieldName.js";
+import formatTime from "../../helper/formatTime.js";
 
 const Container = ({ data }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,6 +28,8 @@ const Container = ({ data }) => {
                     <Typography className="mb-1 text-left">{formatFieldName(key)}</Typography>
                     {key === 'status' ? (
                       <Dropdown />
+                    ) : key === 'createdAt' ? (
+                      <Typography className='font-semibold text-left'>{formatTime(value)}</Typography>
                     ) : (
                       <Typography className='font-semibold text-left'>{value}</Typography>
                     )}
@@ -45,4 +48,3 @@ const Container = ({ data }) => {
 };
 
 export default Container;
-

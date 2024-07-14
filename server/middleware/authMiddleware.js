@@ -37,4 +37,4 @@ const manager = (req, res, next) => {
     }
 }
 
-export { protect, manager };
+export { protect, manager }; 
