@@ -1,14 +1,42 @@
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react' 
-import { Bars3Icon, BellIcon, ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
-import { userNavigation } from '../../utils/constants'; 
+import { useEffect, useState } from 'react';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { Bars3Icon, BellIcon, ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { userNavigation } from '../../utils/constants';
+import { checkAuthStatus, logout } from '../../api/api';
 
 // Function to concatenate class names
 function classNames(...classes) {
-    return classes.filter(Boolean).join(' ');
+  return classes.filter(Boolean).join(' ');
 }
 
 // Navbar component
 const Navbar = ({ setSidebarOpen }) => {
+  const [user, setUser] = useState(null);
+  
+  useEffect(() => {
+    const verifyAuth = async () => {
+      try {
+        const user = await checkAuthStatus();
+        if (!user) {
+          return;
+        }
+        setUser(user);
+      } catch (error) {
+        console.error('Authentication failed:', error);
+      }
+    };
+    verifyAuth();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await logout(); // Call your logout function from API
+      setUser(null); // Clear user state after logout   
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
   return (
     <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
 
@@ -59,7 +87,7 @@ const Navbar = ({ setSidebarOpen }) => {
               />
               <span className="hidden lg:flex lg:items-center">
                 <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
-                  Tom Cook
+                  {user?.username}
                 </span>
                 <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
               </span>
@@ -74,9 +102,10 @@ const Navbar = ({ setSidebarOpen }) => {
                     <a
                       href={item.href}
                       className={classNames(
-                        focus ? 'bg-gray-50' : '',
+                        focus ? 'bg-gray-50' : '',  
                         'block px-3 py-1 text-sm leading-6 text-gray-900',
                       )}
+                      onClick={item.name === 'Sign Out' ? handleLogout : undefined}
                     >
                       {item.name}
                     </a>
@@ -88,7 +117,7 @@ const Navbar = ({ setSidebarOpen }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
