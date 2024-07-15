@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { Bars3Icon, BellIcon, ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { userNavigation } from '../../utils/constants';
@@ -11,6 +12,7 @@ function classNames(...classes) {
 
 // Navbar component
 const Navbar = ({ setSidebarOpen }) => {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   
   useEffect(() => {
@@ -30,8 +32,9 @@ const Navbar = ({ setSidebarOpen }) => {
 
   const handleLogout = async () => {
     try {
-      await logout(); // Call your logout function from API
-      setUser(null); // Clear user state after logout   
+      await logout(); // Call the logout function from API
+      setUser(null); // Clear user state after logout
+      navigate('/'); // Redirect to home page
     } catch (error) {
       console.error('Logout failed:', error);
     }
@@ -105,7 +108,7 @@ const Navbar = ({ setSidebarOpen }) => {
                         focus ? 'bg-gray-50' : '',  
                         'block px-3 py-1 text-sm leading-6 text-gray-900',
                       )}
-                      onClick={item.name === 'Sign Out' ? handleLogout : undefined}
+                      onClick={item.name === 'Sign out' ? handleLogout : undefined}
                     >
                       {item.name}
                     </a>
