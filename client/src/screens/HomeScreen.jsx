@@ -13,8 +13,8 @@ const HomeScreen = () => {
     e.preventDefault(); // Prevent default form submission
 
     try {
-      await login(email, password); // Call login function with email and password
-      navigate('/service-advisor'); // Navigate to '/service-advisor' on successful login
+      const userData = await login(email, password); // Call login function with email and password
+      navigate(`/service-advisor/${userData._id}/dashboard`); // Navigate to '/service-advisor/:id/dashboard' on successful login
     } catch (err) {
       setError(err.response?.data?.message || 'An error occurred'); // Set error message based on response or generic message
     }
