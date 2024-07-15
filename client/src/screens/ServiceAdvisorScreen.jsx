@@ -4,13 +4,22 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { checkAuthStatus, getCustomers } from "../api/api"
 
-// Function to format customer data
 const formatCustomersData = (customersData) => {
   return customersData.map(customer => {
     const { hatNumber, repairOrder, createdAt, customerName, vehicle, contact, priority, status } = customer
-    return { hatNumber, repairOrder, createdAt, customerName, vehicle, contact, priority, status }
+    return { 
+      Hat: hatNumber, 
+      repairOrder, 
+      Opened: createdAt, 
+      customerName, 
+      vehicle, 
+      contact, 
+      priority, 
+      status 
+    }
   })
 }
+
 
 const ServiceAdvisorScreen = () => {
   const navigate = useNavigate()

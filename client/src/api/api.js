@@ -49,4 +49,14 @@ const getCustomers = async () => {
     }
 };
 
-export { api, login, logout, checkAuthStatus, getCustomers };
+const getUsers = async () => {
+    try {
+        const res = await api.get('/users');  
+        return res.data;  
+    } catch (error) {
+        return error.response.data;  
+    }
+};
+
+
+export { api, login, logout, checkAuthStatus, getCustomers, getUsers };
