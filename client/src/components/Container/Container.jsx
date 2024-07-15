@@ -28,7 +28,7 @@ const Container = ({ data }) => {
                     <Typography className="mb-1 text-left">{formatFieldName(key)}</Typography>
                     {key === 'status' ? (
                       <Dropdown />
-                    ) : key === 'createdAt' ? (
+                    ) : key === 'Opened' ? (
                       <Typography className='font-semibold text-left'>{formatTime(value)}</Typography>
                     ) : (
                       <Typography className='font-semibold text-left'>{value}</Typography>

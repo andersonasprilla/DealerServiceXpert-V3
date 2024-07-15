@@ -8,7 +8,22 @@ import { protect } from '../middleware/authMiddleware.js';
 const getCustomers = [
     protect,
     asyncHandler(async (req, res) => {
-        const customers = await Customer.find({ user: req.user._id });
+        const { days, status } = req.query;
+        const query = { user: req.user._id };
+
+        // Filter by days (e.g., last 30 days)
+        if (days) {
+            const daysAgo = new Date();
+            daysAgo.setDate(daysAgo.getDate() - parseInt(days));
+            query.openedAt = { $gte: daysAgo };
+        }
+
+        // Filter by status
+        if (status) {
+            query.status = status;
+        }
+
+        const customers = await Customer.find(query);
 
         if (customers.length > 0) {
             res.status(200).json(customers);
@@ -17,6 +32,7 @@ const getCustomers = [
         }
     })
 ];
+
 
 // @desc    Fetch single customer
 // @route   GET /api/customers/:id

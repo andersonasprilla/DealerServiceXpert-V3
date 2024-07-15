@@ -4,7 +4,7 @@ import {
     getCustomers,
     getCustomerById,
     createCustomer,
-    updateCustomer
+    updateCustomer,
 } from '../controllers/customerController.js';
 
 router.route('/').get(getCustomers).post(createCustomer);
