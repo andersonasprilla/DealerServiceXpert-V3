@@ -29,6 +29,14 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Customer',
     }],
+    users: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    }],
+    parts: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Part',
+    }],
 }, { timestamps: true, versionKey: false });
 
 userSchema.methods.matchPassword = async function (enteredPassword) {

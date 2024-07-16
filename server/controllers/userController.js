@@ -68,7 +68,7 @@ const registerUser = [protect, manager, asyncHandler(async (req, res) => {
 // @route   GET /api/users
 // @access  Private/Manager
 const getUsers = [protect, manager, asyncHandler(async (req, res) => {
-    const users = await User.find({}).select('-customers -password');
+    const users = await User.find({}).select('-customers -password -parts');
     if (users) {
         res.status(200).json(users);
     } else {
@@ -81,7 +81,7 @@ const getUsers = [protect, manager, asyncHandler(async (req, res) => {
 // @route   GET /api/users/me
 // @access  Private
 const getCurrentUser = [protect, asyncHandler(async (req, res) => {
-    const user = await User.findById(req.user._id).select('-password');
+    const user = await User.findById(req.user._id).select('-password -parts');
     if (user) {
         res.status(200).json({
             _id: user._id,
@@ -99,7 +99,7 @@ const getCurrentUser = [protect, asyncHandler(async (req, res) => {
 // @route   GET /api/users/:id
 // @access  Private/Manager
 const getUserById = [protect, manager, asyncHandler(async (req, res) => {
-    const user = await User.findById(req.params.id).select('-password');
+    const user = await User.findById(req.params.id).select('-password -parts');
 
     if (user) {
         res.status(200).json(user);
