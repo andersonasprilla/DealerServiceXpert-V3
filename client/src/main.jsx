@@ -9,6 +9,7 @@ import {
 import App from './App.jsx'
 import HomeScreen from './screens/HomeScreen.jsx'
 import ServiceAdvisorScreen from './screens/ServiceAdvisorScreen.jsx'
+import ManagerScreen from './screens/ManagerScreen.jsx'
 import './output.css'
 
 const router = createBrowserRouter(
@@ -16,6 +17,7 @@ const router = createBrowserRouter(
     <Route path="/" element={<App />}>
       <Route index ={true} path="/" element={<HomeScreen />} />
       <Route path="/service-advisor/:id/dashboard" element={<ServiceAdvisorScreen />} />
+      <Route path="/manager/:id/dashboard" element={<ManagerScreen />} />
     </Route>
   )
 )

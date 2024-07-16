@@ -50,13 +50,14 @@ const getCustomers = async () => {
 };
 
 const getUsers = async () => {
-    try {
-        const res = await api.get('/users');  
-        return res.data;  
-    } catch (error) {
-        return error.response.data;  
-    }
+  try {
+    const res = await api.get('/users');
+    return res.data;  
+  } catch (error) {
+    return error.response.data;  
+  }
 };
+
 
 
 export { api, login, logout, checkAuthStatus, getCustomers, getUsers };

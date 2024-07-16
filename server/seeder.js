@@ -1,6 +1,4 @@
-import mongoose from "mongoose";
 import dotenv from "dotenv";
-import colors from "colors"; // For coloring console output
 import users from "./data/users.js";
 import customers from "./data/customers.js";
 import User from "./models/userModel.js";
@@ -13,9 +11,10 @@ dotenv.config();
 // Connect to the MongoDB database
 connectDB();
 
-// Function to get a random user from the list of users
-const getRandomUser = (users) => {
-    return users[Math.floor(Math.random() * users.length)];
+// Function to get a random service advisor from the list of users
+const getRandomServiceAdvisor = (users) => {
+    const serviceAdvisors = users.filter(user => user.role === 'Service Advisor');
+    return serviceAdvisors[Math.floor(Math.random() * serviceAdvisors.length)];
 };
 
 // Function to import data into the database
@@ -27,20 +26,30 @@ const importData = async () => {
         // Insert the sample users into the database
         const createdUsers = await User.insertMany(await users());
 
-        // Map the sample customers, assigning a random user to each customer
+        // Map the sample customers, assigning a random service advisor to each customer
         const sampleCustomers = customers.map((customer) => {
-            return { ...customer, user: getRandomUser(createdUsers)._id };
+            return { ...customer, user: getRandomServiceAdvisor(createdUsers)._id };
         });
 
         // Insert the sample customers into the database
         const createdCustomers = await Customer.insertMany(sampleCustomers);
 
-        // Update each user's customers field in parallel
+        // Update each service advisor's customers field
         await Promise.all(createdUsers.map(async (user) => {
-            const userCustomers = createdCustomers.filter(customer => customer.user.toString() === user._id.toString());
-            user.customers = userCustomers.map(customer => customer._id);
-            await user.save(); // Save the updated user
+            if (user.role === 'Service Advisor') {
+                const userCustomers = createdCustomers.filter(customer => customer.user.toString() === user._id.toString());
+                user.customers = userCustomers.map(customer => customer._id);
+                await user.save(); // Save the updated user
+            }
         }));
+
+        // Find the manager and assign all service advisors to the manager's users field
+        const manager = createdUsers.find(user => user.role === 'Manager');
+        if (manager) {
+            const serviceAdvisors = createdUsers.filter(user => user.role === 'Service Advisor');
+            manager.users = serviceAdvisors.map(user => user._id);
+            await manager.save(); // Save the updated manager
+        }
 
         console.log('Data Imported!'.green.inverse); // Log success message
         process.exit(); // Exit the process
