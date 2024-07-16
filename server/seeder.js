@@ -4,6 +4,7 @@ import customers from "./data/customers.js";
 import User from "./models/userModel.js";
 import Customer from "./models/customerModel.js";
 import connectDB from "./config/db.js";
+import pkg from 'colors'
 
 // Load environment variables from .env file
 dotenv.config();
