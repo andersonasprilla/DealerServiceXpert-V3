@@ -49,6 +49,10 @@ const customerSchema = new mongoose.Schema({
         enum: ['Checked In!', 'Finished', 'Special Order', 'Back Order'],
         default: 'Checked In!',
     },
+    parts: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Part',
+    }],
 
 }, { timestamps: true, versionKey: false }); 
 
