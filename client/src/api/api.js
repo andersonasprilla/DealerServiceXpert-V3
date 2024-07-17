@@ -9,6 +9,7 @@ const api = axios.create({
     withCredentials: true,  // Enable sending cookies with requests for authentication
 });
 
+
 // Function to handle user login
 const login = async (email, password) => {
     try {
