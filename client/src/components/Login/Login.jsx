@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../api/api';
+import { login } from '../../api/api';
 
-const HomeScreen = () => {
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -108,4 +108,4 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;
+export default Login;
