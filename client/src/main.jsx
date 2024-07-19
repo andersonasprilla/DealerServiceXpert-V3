@@ -7,7 +7,8 @@ import {
   RouterProvider
 } from 'react-router-dom'
 import App from './App.jsx'
-import Login from './components/Login/Login.jsx'
+import HomeScreen from './screens/HomeScreen.jsx'
+import LoginScreen from './screens/LoginScreen.jsx'
 import ServiceAdvisorScreen from './screens/ServiceAdvisorScreen.jsx'
 import ManagerScreen from './screens/ManagerScreen.jsx'
 import './output.css'
@@ -15,7 +16,8 @@ import './output.css'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-      <Route index ={true} path="/" element={<Login/>} />
+      <Route index ={true} path="/" element={<HomeScreen/>} />
+      <Route path="/sign-in" element={<LoginScreen />} />
       <Route path="/service-advisor/:id/dashboard" element={<ServiceAdvisorScreen />} />
       <Route path="/manager/:id/dashboard" element={<ManagerScreen />} />
     </Route>
