@@ -60,4 +60,5 @@ const manager = (req, res, next) => {
     }
 }
 
+
 export { protect, manager }; 

@@ -49,7 +49,7 @@ const importData = async () => {
                 for (const orderData of vehicleData.repairOrders) {
                     const serviceAdvisor = getRandomUser(createdUsers, 'Service Advisor');
                     const newRepairOrder = await RepairOrder.create({
-                        user: serviceAdvisor._id,
+                        userId: serviceAdvisor._id,
                         vehicleId: newVehicle._id,
                         customerId: newCustomer._id,
                         hatNumber: orderData.hatNumber,

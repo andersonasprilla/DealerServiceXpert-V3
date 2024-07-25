@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const repairOrderSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   vehicleId: { type: mongoose.Schema.Types.ObjectId, ref: 'Vehicle' },
   customerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer' },
   hatNumber: {
