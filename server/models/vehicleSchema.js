@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 const vehicleSchema = new mongoose.Schema({
+  customer: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer' },
   vin: {
     required: true,
     type: String,
@@ -18,7 +19,6 @@ const vehicleSchema = new mongoose.Schema({
     required: true,
     type: String,
   },
-  customerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer' },
 } , { versionKey: false });
 
 const Vehicle = mongoose.model('Vehicle', vehicleSchema, 'vehicles');

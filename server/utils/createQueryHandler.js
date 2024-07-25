@@ -14,7 +14,7 @@ const createQueryHandler = (Model, allowedFields, customFilters = {}) => {
             const startIndex = (page - 1) * limit;
 
             // Initialize the query object with the user ID
-            let query = { user: req.user._id };
+            let query = {  };
 
             // Iterate through query parameters to build the query object
             for (const [key, value] of Object.entries(req.query)) {

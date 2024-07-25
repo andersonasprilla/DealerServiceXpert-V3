@@ -16,11 +16,10 @@ const customerSchema = new mongoose.Schema({
         type: String,
         required: true,
         match: [/^\(\d{3}\)-\d{3}-\d{4}$/, 'Must match the format (xxx)-xxx-xxxx']
-    },
-    vehicleIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Vehicle' }],
-    repairOrderIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'RepairOrder' }],
+    }
+
 }, { timestamps: true, versionKey: false });
 
-const Customer = mongoose.model('Customer', customerSchema);
+const Customer = mongoose.model('Customer', customerSchema, 'customers');
 
 export default Customer;
