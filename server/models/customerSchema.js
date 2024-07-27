@@ -15,7 +15,6 @@ const customerSchema = new mongoose.Schema({
     phone: {
         type: String,
         required: true,
-        match: [/^\(\d{3}\)-\d{3}-\d{4}$/, 'Must match the format (xxx)-xxx-xxxx']
     }
 
 }, { timestamps: true, versionKey: false });

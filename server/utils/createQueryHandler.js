@@ -3,16 +3,14 @@ import { protect } from '../middleware/authMiddleware.js';
 import { getPaginationParams, getPaginationMetadata } from '../utils/paginationUtils.js';
 import mongoose from 'mongoose';
 
-const createQueryHandler = (Model, allowedFields, customFilters = {}) => {
+const createQueryHandler = (Model, allowedFields) => {
     return [
         protect,
         asyncHandler(async (req, res) => {
-            // Check if any query parameters are present
             const hasQueryParams = Object.keys(req.query).some(key => 
                 allowedFields.includes(key) && req.query[key].trim()
             );
 
-            // If no query parameters, return empty results
             if (!hasQueryParams) {
                 return res.status(200).json({
                     results: [],
@@ -28,18 +26,21 @@ const createQueryHandler = (Model, allowedFields, customFilters = {}) => {
 
             for (const [key, value] of Object.entries(req.query)) {
                 if (allowedFields.includes(key) && value.trim()) {
-                    if (customFilters[key]) {
-                        query = { ...query, ...customFilters[key](value) };
-                    } else if (key === 'user') {
+                    if (key === 'user') {
                         query[key] = new mongoose.Types.ObjectId(value);
                     } else {
-                        query[key] = { $regex: new RegExp(value, 'i') };
+                        query[key] = value;  // Exact match
                     }
                 }
             }
 
             const total = await Model.countDocuments(query);
             const results = await Model.find(query)
+                .populate({
+                    path: 'customer',
+                    select: 'firstName lastName phone -_id', 
+                    model: 'Customer'
+                })
                 .limit(limit)
                 .skip(skip)
                 .sort({ createdAt: -1 });

@@ -20,7 +20,7 @@ const repairOrderSchema = new mongoose.Schema({
     required: true,
     type: String,
   },
-  status : {
+  status: {
     type: String,
     enum: ['checked-in', 'in-repair', 'completed', 'special-order'],
     default: 'checked-in'
