@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 
 const repairOrderSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  vehicle: { type: mongoose.Schema.Types.ObjectId, ref: 'Vehicle' },
   customer: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer' },
   specialOrders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'SpecialOrder' }],
   
@@ -25,6 +24,7 @@ const repairOrderSchema = new mongoose.Schema({
     enum: ['checked-in', 'in-repair', 'completed', 'special-order'],
     default: 'checked-in'
   },
+  
 } , { timestamps: true, versionKey: false });
 
 const RepairOrder = mongoose.model('RepairOrder', repairOrderSchema, 'repair-orders');

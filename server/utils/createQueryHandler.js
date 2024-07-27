@@ -38,7 +38,7 @@ const createQueryHandler = (Model, allowedFields) => {
             const results = await Model.find(query)
                 .populate({
                     path: 'customer',
-                    select: 'firstName lastName phone -_id', 
+                    select: 'firstName lastName phone  vin -_id', 
                     model: 'Customer'
                 })
                 .limit(limit)

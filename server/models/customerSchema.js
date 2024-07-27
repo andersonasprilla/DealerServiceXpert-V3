@@ -15,6 +15,12 @@ const customerSchema = new mongoose.Schema({
     phone: {
         type: String,
         required: true,
+    },
+    vin: {
+        type: String,
+        required: false,
+        unique: true,
+        match: [/^[A-HJ-NPR-Z0-9]{17}$/, 'Please enter a valid VIN'] // Excludes I, O, Q characters from VIN
     }
 
 }, { timestamps: true, versionKey: false });
