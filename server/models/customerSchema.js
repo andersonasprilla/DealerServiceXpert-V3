@@ -18,12 +18,10 @@ const customerSchema = new mongoose.Schema({
     },
     vin: {
         type: String,
-        required: false,
-        unique: true,
-        match: [/^[A-HJ-NPR-Z0-9]{17}$/, 'Please enter a valid VIN'] // Excludes I, O, Q characters from VIN
-    }
-
-}, { timestamps: true, versionKey: false });
+        required: true,
+        match: [/^[A-HJ-NPR-Z0-9]{17}$/, 'Must be a 17-character alphanumeric string']
+    },
+}, { timestamps: true, versionKey: false, strictPopulate: false});
 
 const Customer = mongoose.model('Customer', customerSchema, 'customers');
 

@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 const repairOrderSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   customer: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer' },
-  specialOrders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'SpecialOrder' }],
   
   hatNumber: {
     required: true,
@@ -24,7 +23,11 @@ const repairOrderSchema = new mongoose.Schema({
     enum: ['checked-in', 'in-repair', 'completed', 'special-order'],
     default: 'checked-in'
   },
-  
+  specialOrder: {
+    type: String, 
+    default: ''
+  },
+
 } , { timestamps: true, versionKey: false });
 
 const RepairOrder = mongoose.model('RepairOrder', repairOrderSchema, 'repair-orders');
