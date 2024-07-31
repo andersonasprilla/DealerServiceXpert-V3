@@ -4,9 +4,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const generateToken = (res, userId) => {
-    // // Debugging logs
-    // console.log('JWT_SECRET:', process.env.JWT_SECRET);
-    // console.log('JWT_REFRESH_SECRET:', process.env.JWT_REFRESH_SECRET);
 
     // Generate an access token with the user ID as payload
     const accessToken = jwt.sign({ userId }, process.env.JWT_SECRET, {

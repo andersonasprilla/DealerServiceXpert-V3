@@ -17,4 +17,4 @@ router.route('/').post(registerUser).get(getUsers);
 router.route('/me').get(getCurrentUser);
 router.route('/:id').get(getUserById).put(updateUser).delete(deleteUser);
 
-export default router;
+export default router; 

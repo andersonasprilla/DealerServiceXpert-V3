@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import asyncHandler from  './asyncHandler.js';
-import User from '../models/userModel.js';
+import User from '../models/userSchema.js';
 
 // Protect routes
 const protect = asyncHandler(async (req, res, next) => {
@@ -59,5 +59,6 @@ const manager = (req, res, next) => {
         throw new Error('Not authorized as a Manager');
     }
 }
+
 
 export { protect, manager }; 

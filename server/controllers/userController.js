@@ -1,5 +1,5 @@
 import asyncHandler from "../middleware/asyncHandler.js";
-import User from "../models/userModel.js";
+import User from "../models/userSchema.js";
 import generateToken from "../utils/generateToken.js";
 import { protect, manager } from '../middleware/authMiddleware.js';
 
