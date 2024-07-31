@@ -40,13 +40,17 @@ const checkAuthStatus = async () => {
     }
 };
 
-// Function to get customers data
-const getRepairOrders = async () => {
+// Function to get repair orders with optional query parameters
+const getRepairOrders = async (queryParams = {}) => {
     try {
-        const res = await api.get('v1/repair-orders');  
+        // Construct the query string from the query parameters
+        const queryString = new URLSearchParams(queryParams).toString();
+        // Make the GET request to the API endpoint with the query string
+        const res = await api.get(`v1/repair-orders?${queryString}`);
         return res.data;  
     } catch (error) {
-        return error.response.data;  
+        console.error('Error fetching repair orders:', error);
+        return error.response?.data || { error: 'Failed to fetch repair orders' };
     }
 };
 

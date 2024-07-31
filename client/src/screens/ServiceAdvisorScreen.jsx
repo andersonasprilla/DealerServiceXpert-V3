@@ -3,44 +3,40 @@ import Container from "../components/Container/Container"
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { checkAuthStatus, getRepairOrders } from "../api/api"
-
-
+import RepairOrderContent from "../components/RepairOrderContent/RepairOrderContent"
 
 const ServiceAdvisorScreen = () => {
   const navigate = useNavigate()
   // State to store customer data
-  const [repairOders, setRepairOrders] = useState([])
+  const [repairOrders, setRepairOrders] = useState([])
 
   useEffect(() => {
     const verifyAuth = async () => {
       try {
-        // Check authentication status
-        const user = await checkAuthStatus()
+        const user = await checkAuthStatus();
         if (!user) {
-          // Redirect to home if not authenticated
-          navigate('/')
-          return
+          navigate('/');
+          return;
         }
-        // Fetch customer data
-        const repairOrderdata = await getRepairOrders()
-        // Update state with formatted customer data
-        setRepairOrders(repairOrderdata)
+        const response = await getRepairOrders({ user: user._id });
+        console.log(response.results)
+        setRepairOrders(response.results);
       } catch (error) {
-        console.error('Authentication failed:', error)
-        // Redirect to home on authentication failure
-        navigate('/')
-      } 
-    }
-    // Call the authentication and data fetching function
-    verifyAuth()
-  }, [navigate]) // Re-run effect if navigate function changes
+        console.error('Authentication failed:', error);
+        navigate('/');
+      }
+    };
+    verifyAuth();
+  }, [navigate]);
+
 
   return (
     <Layout>
-      {/* Map over customers and render Container for each customer */}
-      {/* {repairOders.map((repairOrder, index) => (
-        <Container key={index} data={repairOrder} />
-      ))} */}
+      {repairOrders.map((repairOrder) => (
+        <Container key={repairOrder._id} >
+          <RepairOrderContent repairOrder={repairOrder} />
+        </Container>
+      ))}
     </Layout>
   )
 }

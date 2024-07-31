@@ -2,16 +2,12 @@ import { useState } from 'react';
 import {
   Card,
   CardBody,
-  Typography,
   Accordion,
   AccordionHeader,
   AccordionBody
 } from "@material-tailwind/react";
-import Dropdown from "./Dropdown.jsx";
-import formatFieldName from "../../helper/formatFieldName.js";
-import formatTime from "../../helper/formatTime.js";
 
-const Container = ({ data }) => {
+const Container = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = () => setIsOpen((prev) => !prev);
@@ -22,20 +18,7 @@ const Container = ({ data }) => {
         <Accordion open={isOpen}>
           <AccordionHeader onClick={handleOpen} className='border-b-0'>
             <CardBody className='py-0 w-full'>
-              <div className="flex justify-between">
-                {data && Object.entries(data).map(([key, value]) => (
-                  <div key={key} className="flex-1">
-                    <Typography className="mb-1 text-left">{formatFieldName(key)}</Typography>
-                    {key === 'status' ? (
-                      <Dropdown />
-                    ) : key === 'Opened' ? (
-                      <Typography className='font-semibold text-left'>{formatTime(value)}</Typography>
-                    ) : (
-                      <Typography className='font-semibold text-left'>{value}</Typography>
-                    )}
-                  </div>
-                ))}
-              </div>
+                {children}            
             </CardBody>
           </AccordionHeader>
           <AccordionBody>
