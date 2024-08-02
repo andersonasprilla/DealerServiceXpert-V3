@@ -51,7 +51,7 @@ const customers = async () => {
     {
       firstName: "Grace",
       lastName: "Taylor",
-      phone: "33584100299",
+      phone: "3358410029",
       vin: "1HGCM82633A004360",
     },
     {

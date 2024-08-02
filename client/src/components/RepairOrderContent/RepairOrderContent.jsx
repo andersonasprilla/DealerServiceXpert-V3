@@ -1,13 +1,13 @@
 import { Typography } from "@material-tailwind/react";
 import Dropdown from "../Container/Dropdown";
-import formatFieldName from "../../helper/formatFieldName";
 import formatTime from "../../helper/formatTime";
+import formatPhoneNumber from "../../helper/formatPhoneNumber";
 
 const RepairOrderContent = ({ repairOrder }) => {
   const dataOrder = [
     { key: 'hatNumber', label: 'Hat Number' },
     { key: 'repairOrderNumber', label: 'Repair Order' },
-    { key: 'createdAt', label: 'Created At' },
+    { key: 'createdAt', label: 'Opened' },
     { key: 'vin', label: 'VIN' },
     { key: 'customerName', label: 'Customer Name' },
     { key: 'phone', label: 'Phone' },
@@ -20,7 +20,12 @@ const RepairOrderContent = ({ repairOrder }) => {
       return <Dropdown initialStatus={value} />;
     } else if (key === 'createdAt') {
       return <Typography className='font-semibold text-left'>{formatTime(value)}</Typography>;
-    } else {
+    
+    }  else if (key === 'phone') {
+      return <Typography className='font-semibold text-left'>{formatPhoneNumber(value)}</Typography>;
+
+    } 
+      else {
       return <Typography className='font-semibold text-left'>{value}</Typography>;
     }
   };
