@@ -16,7 +16,7 @@ const vinDecodeQueryHandler = async (query) => {
     }
 
     // Process the results to extract only the required fields
-    const fieldsToExtract = ['Model', 'Model Year'];
+    const fieldsToExtract = ['Make', 'Model', 'Model Year'];
     const decodedInfo = result.recordset.reduce((acc, record) => {
       if (fieldsToExtract.includes(record.Variable)) {
         acc[record.Variable] = record.Value;

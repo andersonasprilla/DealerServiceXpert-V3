@@ -17,11 +17,22 @@ const customerSchema = new mongoose.Schema({
         required: true,
         match: [/^\d{10}$/, 'Must be a 10-digit number ']
     },
-    vin: {
-        type: String,
-        required: true,
-        match: [/^[A-HJ-NPR-Z0-9]{17}$/, 'Must be a 17-character alphanumeric string']
-    },
+    vehicle: {
+        make: {
+            type: String,
+            required: true,
+        },
+        model: {
+            type: String,
+            required: true,
+        },
+        year: {
+            type: Number,
+            required: true,
+            min: 1960,
+            max: 2100
+        }
+    }
 }, { timestamps: true, versionKey: false, strictPopulate: false});
 
 const Customer = mongoose.model('Customer', customerSchema, 'customers');

@@ -8,7 +8,7 @@ const RepairOrderContent = ({ repairOrder }) => {
     { key: 'hatNumber', label: 'Hat Number' },
     { key: 'repairOrderNumber', label: 'Repair Order' },
     { key: 'createdAt', label: 'Opened' },
-    { key: 'vin', label: 'Vehicle' },
+    { key: 'vehicle', label: 'Vehicle' },
     { key: 'customerName', label: 'Customer Name' },
     { key: 'phone', label: 'Phone' },
     { key: 'repairDescription', label: 'Repair Description' },
@@ -20,12 +20,9 @@ const RepairOrderContent = ({ repairOrder }) => {
       return <Dropdown initialStatus={value} />;
     } else if (key === 'createdAt') {
       return <Typography className='font-semibold text-left'>{formatTime(value)}</Typography>;
-    
-    }  else if (key === 'phone') {
+    } else if (key === 'phone') {
       return <Typography className='font-semibold text-left'>{formatPhoneNumber(value)}</Typography>;
-
-    } 
-      else {
+    } else {
       return <Typography className='font-semibold text-left'>{value}</Typography>;
     }
   };
@@ -36,8 +33,11 @@ const RepairOrderContent = ({ repairOrder }) => {
         let value = repairOrder[key];
         if (key === 'customerName') {
           value = `${repairOrder.customer.firstName} ${repairOrder.customer.lastName}`;
-        } else if (key === 'phone' || key === 'vin') {
+        } else if (key === 'phone') {
           value = repairOrder.customer[key];
+        } else if (key === 'vehicle') {
+          const { model, year } = repairOrder.customer.vehicle;
+          value = `${model} ${year}`;
         }
         return (
           <div key={key} className="flex-1">
