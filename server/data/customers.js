@@ -4,61 +4,101 @@ const customers = async () => {
       firstName: "John",
       lastName: "Doe",
       phone: "4898852148",
-      vin: "1HGCM82633A004352",
+      vehicle: {
+        make: "HONDA",
+        model: "Accord",
+        year: 2003,
+      },
     },
     {
       firstName: "Jane",
       lastName: "Smith",
       phone: "6325548956",
-      vin: "1HGCM82633A004353",
+      vehicle: {
+        make: "HONDA",
+        model: "Civic",
+        year: 2005,
+      },
     },
     {
       firstName: "Bob",
       lastName: "Johnson",
       phone: "7115596324",
-      vin: "1HGCM82633A004354",
+      vehicle: {
+        make: "HONDA",
+        model: "Pilot",
+        year: 2007,
+      },
     },
     {
       firstName: "Alice",
       lastName: "Williams",
       phone: "2985554130",
-      vin: "1HGCM82633A004355",
+      vehicle: {
+        make: "HONDA",
+        model: "CR-V",
+        year: 2009,
+      },
     },
     {
       firstName: "Charlie",
       lastName: "Brown",
       phone: "6933336998",
-      vin: "1HGCM82633A004356",
+      vehicle: {
+        make: "HONDA",
+        model: "Fit",
+        year: 2011,
+      },
     },
     {
       firstName: "David",
       lastName: "Wilson",
       phone: "9548852397",
-      vin: "1HGCM82633A004357",
+      vehicle: {
+        make: "HONDA",
+        model: "Odyssey",
+        year: 2013,
+      },
     },
     {
       firstName: "Emma",
       lastName: "Davis",
       phone: "3056321147",
-      vin: "1HGCM82633A004358",
+      vehicle: {
+        make: "HONDA",
+        model: "Insight",
+        year: 2015,
+      },
     },
     {
       firstName: "Frank",
       lastName: "Miller",
       phone: "3478956200",
-      vin: "1HGCM82633A004359",
+      vehicle: {
+        make: "HONDA",
+        model: "Ridgeline",
+        year: 2017,
+      },
     },
     {
       firstName: "Grace",
       lastName: "Taylor",
-      phone: "33584100299",
-      vin: "1HGCM82633A004360",
+      phone: "3358410029",
+      vehicle: {
+        make: "HONDA",
+        model: "Passport",
+        year: 2019,
+      },
     },
     {
       firstName: "Hannah",
       lastName: "Anderson",
       phone: "2018744416",
-      vin: "1HGCM82633A004361",
+      vehicle: {
+        make: "HONDA",
+        model: "HR-V",
+        year: 2021,
+      },
     },
   ];
 };

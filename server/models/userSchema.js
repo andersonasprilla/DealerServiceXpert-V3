@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import capitalizeName from "../middleware/capitalizeName.js";
+import capitalizeName from "../utils/capitalizeName.js";
 import argon2 from 'argon2'; 
 
 const userSchema = new mongoose.Schema({

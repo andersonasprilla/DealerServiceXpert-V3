@@ -7,7 +7,7 @@ const queryCustomers = readOnlyQueryHandler(Customer, {
   populateFields: [], 
   
   // Define fields that are searchable in the query
-  searchFields: ['firstName', 'lastName', 'vin', 'phone'],
+  searchFields: ['firstName', 'lastName', 'vehicle', 'phone'],
   
   // Set default sorting options, sorting by last name, then first name in ascending order
   sortOptions: { lastName: 1, firstName: 1 }, 

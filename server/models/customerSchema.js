@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import capitalizeName from '../middleware/capitalizeName.js';
+import capitalizeName from '../utils/capitalizeName.js';
 
 const customerSchema = new mongoose.Schema({
     firstName: {
@@ -15,12 +15,24 @@ const customerSchema = new mongoose.Schema({
     phone: {
         type: String,
         required: true,
+        match: [/^\d{10}$/, 'Must be a 10-digit number ']
     },
-    vin: {
-        type: String,
-        required: true,
-        match: [/^[A-HJ-NPR-Z0-9]{17}$/, 'Must be a 17-character alphanumeric string']
-    },
+    vehicle: {
+        make: {
+            type: String,
+            required: true,
+        },
+        model: {
+            type: String,
+            required: true,
+        },
+        year: {
+            type: Number,
+            required: true,
+            min: 1960,
+            max: 2100
+        }
+    }
 }, { timestamps: true, versionKey: false, strictPopulate: false});
 
 const Customer = mongoose.model('Customer', customerSchema, 'customers');

@@ -1,34 +1,32 @@
 import Layout from "../components/Layout/Layout"
 import Container from "../components/Container/Container"
 import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-import { checkAuthStatus, getRepairOrders } from "../api/api"
+import { getRepairOrders } from "../api/api"
 import RepairOrderContent from "../components/RepairOrderContent/RepairOrderContent"
+import useAuthVerification from "../middleware/useAuthVerification"
 
 const ServiceAdvisorScreen = () => {
-  const navigate = useNavigate()
-  // State to store customer data
-  const [repairOrders, setRepairOrders] = useState([])
+  const { user, isLoading } = useAuthVerification('Service Advisor');
+  const [repairOrders, setRepairOrders] = useState([]);
 
   useEffect(() => {
-    const verifyAuth = async () => {
-      try {
-        const user = await checkAuthStatus();
-        if (!user) {
-          navigate('/');
-          return;
+    const fetchRepairOrders = async () => {
+      if (user) {
+        try {
+          const response = await getRepairOrders({ user: user._id });
+          setRepairOrders(response.results);
+        } catch (error) {
+          console.error('Failed to fetch repair orders:', error);
         }
-        const response = await getRepairOrders({ user: user._id });
-        console.log(response.results)
-        setRepairOrders(response.results);
-      } catch (error) {
-        console.error('Authentication failed:', error);
-        navigate('/');
       }
     };
-    verifyAuth();
-  }, [navigate]);
 
+    fetchRepairOrders();
+  }, [user]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Layout>

@@ -4,14 +4,17 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 dotenv.config();
 import connectDB from './config/db.js';
+import { connectSQL } from './config/sqlConfig.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 const port = process.env.PORT || 5002;
 import customerRoutes from './routes/customerRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import repairOrderRoutes from './routes/repairOrderRoutes.js';
+import vinRoutes from './routes/vinRoutes.js';
 
-// Connect to the database
+// Connect to the databases
 connectDB(); 
+connectSQL();
 
 const app = express();
 
@@ -37,12 +40,12 @@ app.get('/', (req, res) => {
 app.use('/api/v1/customers', customerRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/repair-orders', repairOrderRoutes);
-
+app.use('/api/v1/vin', vinRoutes);
 
 // Error handling middleware
 app.use(notFound);
 app.use(errorHandler);
 
 app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+  console.log(`MongoDb server running on port ${port}`);
 });

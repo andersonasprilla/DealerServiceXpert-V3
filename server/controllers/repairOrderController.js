@@ -5,7 +5,7 @@ import readOnlyQueryHandler from "../utils/readOnlyQueryHandler.js";
 const queryRepairOrders = readOnlyQueryHandler(RepairOrder, {
   // Specify fields to populate in the resulting documents
   populateFields: [
-    { path: 'customer', select: 'firstName lastName phone vin -_id' } 
+    { path: 'customer', select: 'firstName lastName vehicle phone -_id' } 
   ],
   // Define fields that are searchable in the query
   searchFields: ['repairOrderNumber', 'hatNumber', 'user'],
