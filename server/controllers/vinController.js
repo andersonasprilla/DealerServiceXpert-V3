@@ -2,6 +2,16 @@ import { vinDecodeQueryHandler } from "../utils/sqlQueryHandler.js";
 
 const queryVinDecode = async (req, res) => {
   try {
+    const { vin } = req.query;
+    
+    // Validate the VIN length
+    if (!vin || vin.length !== 17) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid VIN. VIN must be a 17-digit '
+      });
+    }
+
     const result = await vinDecodeQueryHandler(req.query);
     if (result) {
       res.json({
