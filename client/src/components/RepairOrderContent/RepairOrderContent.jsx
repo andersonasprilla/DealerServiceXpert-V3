@@ -8,7 +8,7 @@ const RepairOrderContent = ({ repairOrder }) => {
     { key: 'hatNumber', label: 'Hat Number' },
     { key: 'repairOrderNumber', label: 'Repair Order' },
     { key: 'createdAt', label: 'Opened' },
-    { key: 'vin', label: 'VIN' },
+    { key: 'vin', label: 'Vehicle' },
     { key: 'customerName', label: 'Customer Name' },
     { key: 'phone', label: 'Phone' },
     { key: 'repairDescription', label: 'Repair Description' },
