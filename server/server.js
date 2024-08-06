@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 dotenv.config();
-import connectDB from './config/db.js';
+import { connectMongoDb } from './config/mongoDbConfig.js';
 import { connectSQL } from './config/sqlConfig.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 const port = process.env.PORT || 5002;
@@ -13,7 +13,7 @@ import repairOrderRoutes from './routes/repairOrderRoutes.js';
 import vinRoutes from './routes/vinRoutes.js';
 
 // Connect to the databases
-connectDB(); 
+connectMongoDb();
 connectSQL();
 
 const app = express();
