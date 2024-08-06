@@ -1,7 +1,9 @@
 import RepairOrder from "../models/repairOrderSchema.js";
 import readOnlyQueryHandler from "../utils/readOnlyQueryHandler.js";
 
-// Define the queryRepairOrders handler using ReadOnlyQueryHandler
+// @desc    Query repair orders
+// @route   GET /api/repair-orders
+// @access  Private
 const queryRepairOrders = readOnlyQueryHandler(RepairOrder, {
   // Specify fields to populate in the resulting documents
   populateFields: [
