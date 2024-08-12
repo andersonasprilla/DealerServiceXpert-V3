@@ -16,7 +16,7 @@ const ManagerScreen = () => {
       if (user) {
         try {
           setIsLoading(true);
-          const response = await getUsers();
+          const response = await getUsers({role: 'Service Advisor'});
           setUsers(response.results || []);
         } catch (error) {
           console.error('Failed to fetch users:', error);
