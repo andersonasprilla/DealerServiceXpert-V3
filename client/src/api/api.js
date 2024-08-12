@@ -54,14 +54,21 @@ const getRepairOrders = async (queryParams = {}) => {
     }
 };
 
-const getUsers = async () => {
-  try {
-    const res = await api.get('v1/users');
-    return res.data;  
-  } catch (error) {
-    return error.response.data;  
-  }
-};
+const getUsers = async (queryParams = {}) => {
+    try {
+      // Construct the query string from the query parameters
+      const queryString = new URLSearchParams(queryParams).toString();
+      // Make the GET request to the API endpoint with the query string
+      const res = await api.get(`v1/users?${queryString}`);
+      return res.data;  
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      return error.response?.data || { error: 'Failed to fetch users' };
+    }
+  };
+
+  
+   
 
 
 

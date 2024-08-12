@@ -4,8 +4,7 @@ import {
     loginUser,
     logoutUser,
     registerUser,
-    getUsers,
-    getUserById,
+    queryUsers,
     updateUser,
     deleteUser,
     getCurrentUser
@@ -13,8 +12,8 @@ import {
 
 router.route('/login').post(loginUser);
 router.route('/logout').post(logoutUser);
-router.route('/').post(registerUser).get(getUsers);
+router.route('/').post(registerUser).get(queryUsers);
 router.route('/me').get(getCurrentUser);
-router.route('/:id').get(getUserById).put(updateUser).delete(deleteUser);
+router.route('/:id').put(updateUser).delete(deleteUser);
 
 export default router; 

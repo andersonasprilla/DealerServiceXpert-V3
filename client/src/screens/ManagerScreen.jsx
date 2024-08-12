@@ -2,36 +2,27 @@ import Layout from "../components/Layout/Layout"
 import Container from "../components/Container/Container"
 import { useState, useEffect } from "react"
 import { getUsers } from "../api/api"
+import UserContent from "../components/UserContent/UserContent"
 import useAuthVerification from "../middleware/useAuthVerification"
 
-// Function to filter and format users with role 'service advisor'
-const formatServiceAdvisorsData = (usersData) => {
-  return usersData
-    .filter(user => user.role === 'Service Advisor')
-    .map(user => {
-      const { username, email, role } = user
-      return { 
-        Name: username, 
-        Email: email, 
-        Role: role, 
-
-      }
-    })
-}
-
 const ManagerScreen = () => {
-  const { user, isLoading } = useAuthVerification('Manager');
+  const { user, isLoading: authLoading } = useAuthVerification('Manager');
   const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
       if (user) {
         try {
-          const usersData = await getUsers();
-          const formattedUsers = formatServiceAdvisorsData(usersData);
-          setUsers(formattedUsers); 
+          setIsLoading(true);
+          const response = await getUsers();
+          setUsers(response.results || []);
         } catch (error) {
           console.error('Failed to fetch users:', error);
+          setError('Failed to fetch users. Please try again later.');
+        } finally {
+          setIsLoading(false);
         }
       }
     };
@@ -39,15 +30,29 @@ const ManagerScreen = () => {
     fetchUsers();
   }, [user]);
 
+  if (authLoading) {
+    return <div>Verifying authentication...</div>;
+  }
+
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>Loading users...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
   }
 
   return (
     <Layout>
-      {users.map((user, index) => (
-        <Container key={index} data={user} />
-      ))}
+      {users.length > 0 ? (
+        users.map((user, index) => (
+          <Container key={index}>
+            <UserContent user={user} />
+          </Container>
+        ))
+      ) : (
+        <div>No users found.</div>
+      )}
     </Layout>
   )
 }

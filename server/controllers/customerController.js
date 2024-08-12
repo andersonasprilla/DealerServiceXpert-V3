@@ -4,7 +4,6 @@ import readOnlyQueryHandler from "../utils/readOnlyQueryHandler.js";
 // @desc    Query customers
 // @route   GET /api/customers
 // @access  Private
-
 const queryCustomers = readOnlyQueryHandler(Customer, {
   // Specify fields to populate in the resulting documents
   populateFields: [], 

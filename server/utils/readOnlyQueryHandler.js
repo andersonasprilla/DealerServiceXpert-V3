@@ -12,12 +12,14 @@ const readOnlyQueryHandler = (Model, options = {}) => {
     searchFields = [],
     sortOptions = { createdAt: -1 },
     preQueryMiddleware = [],
+    select = '' // New option for fields to select/exclude
   } = options;
 
   return [
     protect, // Middleware to protect the route
     ...preQueryMiddleware, // Additional middleware specified in options
     asyncHandler(async (req, res) => {
+      
       // Extracting and removing pagination and sort parameters from the query
       const filteredParams = { ...req.query };
       delete filteredParams.page;
@@ -50,6 +52,11 @@ const readOnlyQueryHandler = (Model, options = {}) => {
       // Count the total number of documents matching the query
       const total = await Model.countDocuments(query);
       let queryBuilder = Model.find(query);
+
+      // Apply field selection or exclusion
+      if (select) {
+        queryBuilder = queryBuilder.select(select);
+      }
 
       // Apply population with field selection if specified
       populateFields.forEach(populate => {

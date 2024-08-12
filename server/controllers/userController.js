@@ -2,6 +2,7 @@ import asyncHandler from "../middleware/asyncHandler.js";
 import User from "../models/userSchema.js";
 import generateToken from "../utils/generateToken.js";
 import { protect, manager } from '../middleware/authMiddleware.js';
+import readOnlyQueryHandler from "../utils/readOnlyQueryHandler.js";
 
 // @desc    Login user
 // @route   POST /api/users/login
@@ -64,24 +65,31 @@ const registerUser = [protect, manager, asyncHandler(async (req, res) => {
     }
 })];
 
-// @desc    Get users
+
+
+// @desc    Query users
 // @route   GET /api/users
-// @access  Private/Manager
-const getUsers = [protect, manager, asyncHandler(async (req, res) => {
-    const users = await User.find({}).select('-customers -password -parts');
-    if (users) {
-        res.status(200).json(users);
-    } else {
-        res.status(404);
-        throw new Error('No users found');
-    }
-})];
+// @access  Private
+const queryUsers = readOnlyQueryHandler(User, {
+    // Specify fields to populate in the resulting documents
+    populateFields: [],
+    // Define fields that are searchable in the query
+    searchFields: ['username', 'email', 'role'],
+    // Set default sorting options, sorting by username in ascending order
+    sortOptions: { username: 1 },
+    // Include any additional middleware functions to be run before the query
+    preQueryMiddleware: [],
+    // Specify fields to exclude from the query results
+    select: '-_id -password -createdAt -updatedAt'
+  });
+
+
 
 // @desc    Get current user
 // @route   GET /api/users/me
 // @access  Private
 const getCurrentUser = [protect, asyncHandler(async (req, res) => {
-    const user = await User.findById(req.user._id).select('-password -parts');
+    const user = await User.findById(req.user._id).select('-password');
     if (user) {
         res.status(200).json({
             _id: user._id,
@@ -89,20 +97,6 @@ const getCurrentUser = [protect, asyncHandler(async (req, res) => {
             email: user.email,
             role: user.role,
         });
-    } else {
-        res.status(404);
-        throw new Error('User not found');
-    }
-})];
-
-// @desc    Get user by ID
-// @route   GET /api/users/:id
-// @access  Private/Manager
-const getUserById = [protect, manager, asyncHandler(async (req, res) => {
-    const user = await User.findById(req.params.id).select('-password -parts');
-
-    if (user) {
-        res.status(200).json(user);
     } else {
         res.status(404);
         throw new Error('User not found');
@@ -153,9 +147,8 @@ export {
     loginUser,
     logoutUser,
     registerUser,
-    getUsers,
-    getUserById,
+    queryUsers,
     updateUser,
     deleteUser,
     getCurrentUser,
-};
+};  
