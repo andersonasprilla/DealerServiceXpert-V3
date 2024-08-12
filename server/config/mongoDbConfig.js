@@ -6,8 +6,6 @@ const connectMongoDb = async () => {
         const conn = await mongoose.connect(process.env.MONGO_URI, {
             // Additional options can be added here if necessary.
         });
-        // If the connection is successful, log the host to which MongoDB is connected.
-        console.log(`MongoDB Connected: ${conn.connection.host}`);
     } catch (error) {
         // If an error occurs, log the error message to the console.
         console.log(`Error: ${error.message}`);
@@ -16,4 +14,4 @@ const connectMongoDb = async () => {
     }
 };
 
-export { connectMongoDb }; // Export the connectMongoDb function for use in other modules.
+export { connectMongoDb }; // Export the connectMongoDb function for use in other modules. 
