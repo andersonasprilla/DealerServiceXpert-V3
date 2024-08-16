@@ -47,16 +47,6 @@ const protect = asyncHandler(async (req, res, next) => {
     throw new ApiError(401, 'Not authorized, no token');
 });
 
-// Role-based authorization
-const authorize = (...roles) => {
-    return (req, res, next) => {
-        if (!req.user || !roles.includes(req.user.role)) {
-            throw new ApiError(403, `Not authorized as ${roles.join(' or ')}`);
-        }
-        next();
-    };
-};
-
 // Permission-based authorization
 const requirePermission = (permission) => {
     return (req, res, next) => {
@@ -67,4 +57,4 @@ const requirePermission = (permission) => {
     };
 };
 
-export { protect, authorize, requirePermission };
+export { protect, requirePermission };
