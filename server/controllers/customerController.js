@@ -1,21 +1,21 @@
 import Customer from "../models/customerSchema.js";
-import readOnlyQueryHandler from "../utils/readOnlyQueryHandler.js";
+import createGenericQueryHandler from "../utils/createGenericQueryHandler.js";
 
 // @desc    Query customers
 // @route   GET /api/customers
 // @access  Private
-const queryCustomers = readOnlyQueryHandler(Customer, {
+const queryCustomers = createGenericQueryHandler(Customer, {
   // Specify fields to populate in the resulting documents
-  populateFields: [], 
-  
+  populateFields: [],
+
   // Define fields that are searchable in the query
   searchFields: ['firstName', 'lastName', 'vehicle', 'phone'],
-  
+
   // Set default sorting options, sorting by last name, then first name in ascending order
-  sortOptions: { lastName: 1, firstName: 1 }, 
-  
+  sortOptions: { lastName: 1, firstName: 1 },
+
   // Include any additional middleware functions to be run before the query
-  preQueryMiddleware: [] 
+  preQueryMiddleware: []
 });
 
 export { queryCustomers };

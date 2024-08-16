@@ -2,7 +2,7 @@ import asyncHandler from "../middleware/asyncHandler.js";
 import User from "../models/userSchema.js";
 import generateToken from "../utils/generateToken.js";
 import { protect, manager } from '../middleware/authMiddleware.js';
-import readOnlyQueryHandler from "../utils/readOnlyQueryHandler.js";
+import createGenericQueryHandler from "../utils/createGenericQueryHandler.js";
 
 // @desc    Login user
 // @route   POST /api/users/login
@@ -70,7 +70,7 @@ const registerUser = [protect, manager, asyncHandler(async (req, res) => {
 // @desc    Query users
 // @route   GET /api/users
 // @access  Private
-const queryUsers = readOnlyQueryHandler(User, {
+const queryUsers = createGenericQueryHandler(User, {
     // Specify fields to populate in the resulting documents
     populateFields: [],
     // Define fields that are searchable in the query
@@ -81,7 +81,7 @@ const queryUsers = readOnlyQueryHandler(User, {
     preQueryMiddleware: [],
     // Specify fields to exclude from the query results
     select: '-_id -password -createdAt -updatedAt'
-  });
+});
 
 
 
