@@ -5,7 +5,7 @@ import cors from 'cors';
 dotenv.config();
 import { connectMongoDb } from './config/mongoDbConfig.js';
 import { connectSQL } from './config/sqlConfig.js';
-import { notFound, errorHandler } from './middleware/errorMiddleware.js';
+import { notFound, errorConverter, errorHandler } from './middleware/errorMiddleware.js';
 const port = process.env.PORT || 5002;
 import customerRoutes from './routes/customerRoutes.js';
 import userRoutes from './routes/userRoutes.js';
@@ -44,6 +44,7 @@ app.use('/api/v1/vin', vinRoutes);
 
 // Error handling middleware
 app.use(notFound);
+app.use(errorConverter);
 app.use(errorHandler);
 
 app.listen(port, () => {
