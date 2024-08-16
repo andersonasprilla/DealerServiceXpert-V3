@@ -1,35 +1,36 @@
 import jwt from 'jsonwebtoken';
-import asyncHandler from  './asyncHandler.js';
+import asyncHandler from './asyncHandler.js';
 import User from '../models/userSchema.js';
+import { getPermissionsForRole } from '../utils/roles.js';
+import { ApiError } from './errorMiddleware.js';
 
 // Protect routes
 const protect = asyncHandler(async (req, res, next) => {
     let token = req.cookies.jwt;
     let refreshToken = req.cookies.refreshToken;
 
-    // Check if access token exists and is valid
     if (token) {
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             req.user = await User.findById(decoded.userId).select('-password');
+            req.userPermissions = getPermissionsForRole(req.user.role);
             return next();
         } catch (error) {
             console.error('Access token verification failed:', error.message);
         }
     }
 
-    // Check if refresh token exists and is valid
     if (refreshToken) {
         try {
             const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
             req.user = await User.findById(decoded.userId).select('-password');
+            req.userPermissions = getPermissionsForRole(req.user.role);
 
             // Generate a new access token
             const newAccessToken = jwt.sign({ userId: decoded.userId }, process.env.JWT_SECRET, {
                 expiresIn: '2h',
             });
 
-            // Set the new access token as an Http-Only cookie
             res.cookie('jwt', newAccessToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV !== 'development',
@@ -40,25 +41,30 @@ const protect = asyncHandler(async (req, res, next) => {
             return next();
         } catch (error) {
             console.error('Refresh token verification failed:', error.message);
-            res.status(401);
-            throw new Error('Not authorized, token failed');
         }
-    } else {
-        res.status(401);
-        throw new Error('Not authorized, no token');
     }
+
+    throw new ApiError(401, 'Not authorized, no token');
 });
 
-// Manager middleware
-const manager = (req, res, next) => {
-    if(req.user && req.user.role === 'Manager') {
-        
+// Role-based authorization
+const authorize = (...roles) => {
+    return (req, res, next) => {
+        if (!req.user || !roles.includes(req.user.role)) {
+            throw new ApiError(403, `Not authorized as ${roles.join(' or ')}`);
+        }
         next();
-    } else {
-        res.status(401);
-        throw new Error('Not authorized as a Manager');
-    }
-}
+    };
+};
 
+// Permission-based authorization
+const requirePermission = (permission) => {
+    return (req, res, next) => {
+        if (!req.user || !req.userPermissions.includes(permission)) {
+            throw new ApiError(403, `You don't have permission to perform this action`);
+        }
+        next();
+    };
+};
 
-export { protect, manager }; 
+export { protect, authorize, requirePermission };

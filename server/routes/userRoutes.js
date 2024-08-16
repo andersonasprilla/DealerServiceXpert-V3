@@ -1,5 +1,6 @@
 import express from 'express';
-const router = express.Router();
+import { protect, authorize, requirePermission } from '../middleware/authMiddleware.js';
+import { ROLES, PERMISSIONS } from '../utils/roles.js';
 import {
     loginUser,
     logoutUser,
@@ -10,10 +11,21 @@ import {
     getCurrentUser
 } from '../controllers/userController.js';
 
-router.route('/login').post(loginUser);
-router.route('/logout').post(logoutUser);
-router.route('/').post(registerUser).get(queryUsers);
-router.route('/me').get(getCurrentUser);
-router.route('/:id').put(updateUser).delete(deleteUser);
+const router = express.Router();
 
-export default router; 
+// Public routes
+router.post('/login', loginUser);
+
+// Protected routes
+router.use(protect);
+
+router.post('/logout', logoutUser);
+router.get('/me', getCurrentUser);
+
+// Routes requiring specific permissions
+router.get('/', requirePermission(PERMISSIONS.READ_USERS), queryUsers);
+router.post('/', requirePermission(PERMISSIONS.CREATE_USER), registerUser);
+router.put('/:id', requirePermission(PERMISSIONS.UPDATE_USER), updateUser);
+router.delete('/:id', requirePermission(PERMISSIONS.DELETE_USER), deleteUser);
+
+export default router;

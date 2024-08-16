@@ -1,7 +1,6 @@
 import asyncHandler from "../middleware/asyncHandler.js";
 import User from "../models/userSchema.js";
 import generateToken from "../utils/generateToken.js";
-import { protect, manager } from '../middleware/authMiddleware.js';
 import createGenericQueryHandler from "../utils/createGenericQueryHandler.js";
 
 // @desc    Login user
@@ -11,37 +10,39 @@ const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
 
-    const doPasswordsMatch = await user.matchPassword(password);
-    if (!user || !doPasswordsMatch) {
+    if (user && (await user.matchPassword(password))) {
+        generateToken(res, user._id);
+        res.status(200).json({
+            _id: user._id,
+            username: user.username,
+            email: user.email,
+            role: user.role,
+        });
+    } else {
         res.status(401);
         throw new Error('Invalid email or password');
     }
-    generateToken(res, user._id);
-    res.status(200).json({
-        _id: user._id,
-        username: user.username,
-        email: user.email,
-        role: user.role,
-    });
 });
 
 // @desc    Logout user / clear cookie
 // @route   POST /api/users/logout
 // @access  Private
-const logoutUser = [protect, asyncHandler(async (req, res) => {
-    Object.keys(req.cookies).forEach(cookieName => {
-        res.cookie(cookieName, '', {
-            httpOnly: true,
-            expires: new Date(0),
-        });
+const logoutUser = asyncHandler(async (req, res) => {
+    res.cookie('jwt', '', {
+        httpOnly: true,
+        expires: new Date(0),
+    });
+    res.cookie('refreshToken', '', {
+        httpOnly: true,
+        expires: new Date(0),
     });
     res.status(200).json({ message: 'Logged out successfully' });
-})];
+});
 
 // @desc    Register a new user
 // @route   POST /api/users
 // @access  Private/Manager
-const registerUser = [protect, manager, asyncHandler(async (req, res) => {
+const registerUser = asyncHandler(async (req, res) => {
     const { username, email, password, role } = req.body;
     const userExists = await User.findOne({ email });
 
@@ -63,7 +64,7 @@ const registerUser = [protect, manager, asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error('Invalid user data');
     }
-})];
+});
 
 
 
@@ -80,7 +81,7 @@ const queryUsers = createGenericQueryHandler(User, {
     // Include any additional middleware functions to be run before the query
     preQueryMiddleware: [],
     // Specify fields to exclude from the query results
-    select: '-_id -password -createdAt -updatedAt'
+    select: ' -password -createdAt -updatedAt'
 });
 
 
@@ -88,7 +89,7 @@ const queryUsers = createGenericQueryHandler(User, {
 // @desc    Get current user
 // @route   GET /api/users/me
 // @access  Private
-const getCurrentUser = [protect, asyncHandler(async (req, res) => {
+const getCurrentUser = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id).select('-password');
     if (user) {
         res.status(200).json({
@@ -101,12 +102,12 @@ const getCurrentUser = [protect, asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error('User not found');
     }
-})];
+});
 
 // @desc    Update user
 // @route   PUT /api/users/:id
 // @access  Private/Manager
-const updateUser = [protect, manager, asyncHandler(async (req, res) => {
+const updateUser = asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
 
     if (!user) {
@@ -121,16 +122,17 @@ const updateUser = [protect, manager, asyncHandler(async (req, res) => {
     const updatedUser = await user.save();
 
     res.status(200).json({
+        _id: updatedUser._id,
         username: updatedUser.username,
         email: updatedUser.email,
         role: updatedUser.role,
     });
-})];
+});
 
 // @desc    Delete user
 // @route   DELETE /api/users/:id
 // @access  Private/Manager
-const deleteUser = [protect, manager, asyncHandler(async (req, res) => {
+const deleteUser = asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
 
     if (!user) {
@@ -138,10 +140,10 @@ const deleteUser = [protect, manager, asyncHandler(async (req, res) => {
         throw new Error('User not found');
     }
 
-    await User.findByIdAndDelete(req.params.id);
+    await User.deleteOne({ _id: req.params.id });
 
     res.status(200).json({ message: 'User removed' });
-})];
+});
 
 export {
     loginUser,
