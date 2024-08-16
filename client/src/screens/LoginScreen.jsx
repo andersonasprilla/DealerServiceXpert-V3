@@ -1,31 +1,57 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../api/api';
 
+// Define a mapping of roles to their respective dashboard routes
+const ROLE_ROUTES = {
+  Manager: (id) => `/manager/${id}/dashboard`,
+  'Service Advisor': (id) => `/service-advisor/${id}/dashboard`,
+  // Add more roles and their corresponding routes here
+  // Technician: (id) => `/technician/${id}/dashboard`,
+  // PartSpecialist: (id) => `/part-specialist/${id}/dashboard`,
+};
+
+// Default route if role is not found in the mapping
+const DEFAULT_ROUTE = '/dashboard';
+
 const LoginScreen = () => {
+  // State variables for form inputs, error handling, and user data
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
 
+  // Effect to handle navigation after successful login
+  useEffect(() => {
+    if (userData) {
+      const getRouteForRole = ROLE_ROUTES[userData.role];
+      const route = getRouteForRole 
+        ? getRouteForRole(userData._id)
+        : DEFAULT_ROUTE;
+      navigate(route);
+    }
+  }, [userData, navigate]);
+
+  // Handler for form submission
   const submitHandler = async (e) => {
     e.preventDefault();
 
     try {
-      const userData = await login(email, password);
-      if (userData.role === 'Manager') {
-        navigate(`/manager/${userData._id}/dashboard`);
-      } else {
-        navigate(`/service-advisor/${userData._id}/dashboard`);
-      }
+      // Attempt to log in
+      const result = await login(email, password);
+      setUserData(result);
     } catch (err) {
+      // Handle login errors
       setError(err.response?.data?.message || 'An error occurred');
     }
   };
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
+      {/* Logo and title */}
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        {/* ... (logo and title JSX) ... */}
         <img
           alt="Your Company"
           src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
@@ -36,10 +62,13 @@ const LoginScreen = () => {
         </h2>
       </div>
 
+      {/* Login form */}
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
         <div className="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
           <form onSubmit={submitHandler} className="space-y-6">
+            {/* Email input */}
             <div>
+              {/* ... (email input JSX) ... */}
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                 Email address
               </label>
@@ -54,8 +83,9 @@ const LoginScreen = () => {
                 />
               </div>
             </div>
-
+            {/* Password input */}
             <div>
+              {/* ... (password input JSX) ... */}
               <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
                 Password
               </label>
@@ -70,8 +100,9 @@ const LoginScreen = () => {
                 />
               </div>
             </div>
-
+             {/* Remember me and Forgot password */}
             <div className="flex items-center justify-between">
+              {/* ... (remember me and forgot password JSX) ... */}
               <div className="flex items-center">
                 <input
                   id="remember-me"
@@ -83,15 +114,15 @@ const LoginScreen = () => {
                   Remember me
                 </label>
               </div>
-
               <div className="text-sm leading-6">
                 <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
                   Forgot password?
                 </a>
               </div>
             </div>
-
+            {/* Submit button */}
             <div>
+              {/* ... (submit button JSX) ... */}
               <button
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -99,7 +130,7 @@ const LoginScreen = () => {
                 Sign in
               </button>
             </div>
-
+            {/* Error message display */}
             {error && <div className="text-red-500 text-sm">{error}</div>}
           </form>
         </div>

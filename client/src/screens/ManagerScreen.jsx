@@ -1,60 +1,40 @@
-import Layout from "../components/Layout/Layout"
-import Container from "../components/Container/Container"
-import { useState, useEffect } from "react"
-import { getUsers } from "../api/api"
-import UserContent from "../components/UserContent/UserContent"
-import useAuthVerification from "../middleware/useAuthVerification"
+import React from 'react';
+import { getUsers } from "../api/api";
+import UserContent from "../components/UserContent/UserContent";
+import useAuthVerification from "../middleware/useAuthVerification";
+import useDataFetching from '../hooks/useDataFetching';
+import AuthenticatedLayout from '../components/Layout/AuthenticatedLayout';
+import Container from "../components/Container/Container";
 
 const ManagerScreen = () => {
+  // Use custom hook for authentication verification
   const { user, isLoading: authLoading } = useAuthVerification('Manager');
-  const [users, setUsers] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      if (user) {
-        try {
-          setIsLoading(true);
-          const response = await getUsers({role: 'Service Advisor'});
-          setUsers(response.results || []);
-        } catch (error) {
-          console.error('Failed to fetch users:', error);
-          setError('Failed to fetch users. Please try again later.');
-        } finally {
-          setIsLoading(false);
-        }
-      }
-    };
+  // Use custom hook for fetching service advisors data
+  const { data: serviceAdvisors, isLoading, error } = useDataFetching(
+    () => getUsers({role: 'Service Advisor'}),
+    [user],
+    !!user?._id  // Only fetch when user ID is available
+  );
 
-    fetchUsers();
-  }, [user]);
-
-  if (authLoading) {
-    return <div>Verifying authentication...</div>;
-  }
-
-  if (isLoading) {
-    return <div>Loading users...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
-
+  // Render the manager dashboard
   return (
-    <Layout>
-      {users.length > 0 ? (
-        users.map((user, index) => (
-          <Container key={index}>
-            <UserContent user={user} />
+    <AuthenticatedLayout isLoading={authLoading || isLoading} error={error}>
+      {serviceAdvisors.length > 0 ? (
+        // Map through service advisors and render each one
+        serviceAdvisors.map((advisor, index) => (
+          <Container key={advisor._id || index}>
+            <UserContent user={advisor} />
           </Container>
         ))
       ) : (
-        <div>No users found.</div>
+        // Display message if no service advisors found
+        <Container>
+          <div>No Service Advisors found.</div>
+        </Container>
       )}
-    </Layout>
-  )
-}
+    </AuthenticatedLayout>
+  );
+};
 
-export default ManagerScreen
+export default ManagerScreen;
