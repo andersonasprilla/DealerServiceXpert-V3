@@ -6,7 +6,7 @@ import User from './models/userSchema.js';
 import Customer from './models/customerSchema.js';
 import RepairOrder from './models/repairOrderSchema.js';
 
-import connectDB from './config/db.js';
+import connectMongoDb from './config/mongoDbConfig.js';
 import 'colors';
 
 dotenv.config();
@@ -21,7 +21,7 @@ const shuffleArray = (array) => {
 
 const importData = async () => {
     try {
-        await connectDB();
+        await connectMongoDb();
 
         await Promise.all([
             User.deleteMany(),
@@ -65,7 +65,7 @@ const importData = async () => {
 
 const destroyData = async () => {
     try {
-        await connectDB();
+        await connectMongoDb();
         await Promise.all([
             User.deleteMany(),
             Customer.deleteMany(),
