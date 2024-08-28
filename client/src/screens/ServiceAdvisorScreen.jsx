@@ -1,42 +1,32 @@
-import Layout from "../components/Layout/Layout"
-import Container from "../components/Container/Container"
-import { useState, useEffect } from "react"
-import { getRepairOrders } from "../api/api"
-import RepairOrderContent from "../components/RepairOrderContent/RepairOrderContent"
-import useAuthVerification from "../middleware/useAuthVerification"
+import React from 'react';
+import { getRepairOrders } from "../api/api";
+import RepairOrderContent from "../components/RepairOrderContent/RepairOrderContent";
+import useAuthVerification from "../middleware/useAuthVerification";
+import useDataFetching from '../hooks/useDataFetching';
+import AuthenticatedLayout from '../components/Layout/AuthenticatedLayout';
+import Container from "../components/Container/Container";
 
 const ServiceAdvisorScreen = () => {
-  const { user, isLoading } = useAuthVerification('Service Advisor');
-  const [repairOrders, setRepairOrders] = useState([]);
+  // Use custom hook for authentication verification
+  const { user, isLoading: authLoading } = useAuthVerification('Service Advisor');
 
-  useEffect(() => {
-    const fetchRepairOrders = async () => {
-      if (user) {
-        try {
-          const response = await getRepairOrders({ user: user._id });
-          setRepairOrders(response.results);
-        } catch (error) {
-          console.error('Failed to fetch repair orders:', error);
-        }
-      }
-    };
+  // Use custom hook for fetching repair orders data
+  const { data: repairOrders, isLoading, error } = useDataFetching(
+    () => getRepairOrders({ user: user?._id }),
+    [user],
+    !!user?._id  // Only fetch when user ID is available
+  );
 
-    fetchRepairOrders();
-  }, [user]);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
+  // Render the service advisor dashboard
   return (
-    <Layout>
+    <AuthenticatedLayout isLoading={authLoading || isLoading} error={error}>
       {repairOrders.map((repairOrder) => (
-        <Container key={repairOrder._id} >
+        <Container key={repairOrder._id}>
           <RepairOrderContent repairOrder={repairOrder} />
         </Container>
       ))}
-    </Layout>
-  )
-}
+    </AuthenticatedLayout>
+  );
+};
 
-export default ServiceAdvisorScreen
+export default ServiceAdvisorScreen;

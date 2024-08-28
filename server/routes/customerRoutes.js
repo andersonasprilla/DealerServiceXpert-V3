@@ -1,9 +1,25 @@
 import express from 'express';
-const router = express.Router();
+import { protect, requirePermission } from '../middleware/authMiddleware.js';
+import { PERMISSIONS } from '../utils/roles.js';
 import {
     queryCustomers,
+    createCustomer,
+    updateCustomer,
+    deleteCustomer,
 } from '../controllers/customerController.js';
 
-router.route('/').get(queryCustomers);
+const router = express.Router();
 
-export default router; 
+// Protected routes
+router.use(protect);
+
+// Routes requiring specific permissions
+router.route('/')
+    .get(requirePermission(PERMISSIONS.READ_CUSTOMERS), queryCustomers)
+    .post(requirePermission(PERMISSIONS.CREATE_CUSTOMER), createCustomer);
+
+router.route('/:id')
+    .put(requirePermission(PERMISSIONS.UPDATE_CUSTOMER), updateCustomer)
+    .delete(requirePermission(PERMISSIONS.DELETE_CUSTOMER), deleteCustomer);
+
+export default router;

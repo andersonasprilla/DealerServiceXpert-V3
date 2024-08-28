@@ -1,11 +1,15 @@
 import express from 'express';
-import { protect } from '../middleware/authMiddleware.js';
+import { protect, requirePermission } from '../middleware/authMiddleware.js';
+import { PERMISSIONS } from '../utils/roles.js';
+import { queryVinDecode } from '../controllers/vinController.js';
 
 const router = express.Router();
-import {
-    queryVinDecode,
-} from '../controllers/vinController.js';
 
-router.route('/vindecode').get(protect, queryVinDecode);
+// Protected routes
+router.use(protect);
+
+// Routes requiring specific permissions
+router.route('/vindecode')
+    .get(requirePermission(PERMISSIONS.READ_VIN), queryVinDecode);
 
 export default router;
