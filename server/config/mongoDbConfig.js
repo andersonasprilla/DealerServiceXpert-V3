@@ -14,4 +14,4 @@ const connectMongoDb = async () => {
     }
 };
 
-export { connectMongoDb }; // Export the connectMongoDb function for use in other modules. 
+export default connectMongoDb 

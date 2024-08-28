@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 dotenv.config();
-import { connectMongoDb } from './config/mongoDbConfig.js';
+import  connectMongoDb  from './config/mongoDbConfig.js';
 import { connectSQL } from './config/sqlConfig.js';
 import { notFound, errorConverter, errorHandler } from './middleware/errorMiddleware.js';
 const port = process.env.PORT || 5002;
