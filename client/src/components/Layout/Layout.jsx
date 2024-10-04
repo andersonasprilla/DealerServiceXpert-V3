@@ -2,7 +2,8 @@ import { useState } from 'react';
 import Navbar from '../Navbar/Navbar'; 
 import Sidebar from '../Sidebar/Sidebar'; 
 import MobileSidebar from '../MobileSidebar/MobileSidebar'; 
-import OpenROs from '../OpenROs/OpenROs';
+import Infobar from '../Infobar/Infobar';
+
 // Layout component that wraps around the main content
 const Layout = ({ children }) => {
     const [sidebarOpen, setSidebarOpen] = useState(false); // State to control the visibility of the mobile sidebar
@@ -18,8 +19,7 @@ const Layout = ({ children }) => {
                 {/* Navbar with a button to toggle the mobile sidebar */}
                 
                 <Navbar setSidebarOpen={setSidebarOpen} />
-                
-                <OpenROs/>
+                <Infobar />
                 <main className="py-10">
                     <div className="px-4 sm:px-6 lg:px-8">
                         {children} {/* Content passed as children */}
