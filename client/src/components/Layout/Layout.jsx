@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Navbar from '../Navbar/Navbar'; 
 import Sidebar from '../Sidebar/Sidebar'; 
 import MobileSidebar from '../MobileSidebar/MobileSidebar'; 
+import Infobar from '../Infobar/Infobar';
 
 // Layout component that wraps around the main content
 const Layout = ({ children }) => {
@@ -17,6 +18,7 @@ const Layout = ({ children }) => {
             <div className="lg:pl-72">
                 {/* Navbar with a button to toggle the mobile sidebar */}
                 <Navbar setSidebarOpen={setSidebarOpen} />
+                <Infobar />
                 <main className="py-10">
                     <div className="px-4 sm:px-6 lg:px-8">
                         {children} {/* Content passed as children */}
