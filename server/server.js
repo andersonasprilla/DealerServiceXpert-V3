@@ -14,7 +14,7 @@ import vinRoutes from './routes/vinRoutes.js';
 
 // Connect to the databases
 connectMongoDb();
-// connectSQL();
+connectSQL();
 
 const app = express();
 
