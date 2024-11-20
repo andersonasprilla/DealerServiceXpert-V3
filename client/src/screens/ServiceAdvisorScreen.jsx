@@ -21,7 +21,7 @@ const ServiceAdvisorScreen = () => {
   return (
     <AuthenticatedLayout isLoading={authLoading || isLoading} error={error}>
       {repairOrders.map((repairOrder) => (
-        <Container key={repairOrder._id}>
+        <Container key={repairOrder._id} repairDescription={repairOrder.repairDescription}>
           <RepairOrderContent repairOrder={repairOrder} />
         </Container>
       ))}
