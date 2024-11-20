@@ -4,10 +4,11 @@ import {
   CardBody,
   Accordion,
   AccordionHeader,
-  AccordionBody
+  AccordionBody,
+  Typography
 } from "@material-tailwind/react";
 
-const Container = ({ children }) => {
+const Container = ({ children, repairDescription }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = () => setIsOpen((prev) => !prev);
@@ -21,8 +22,9 @@ const Container = ({ children }) => {
                 {children}            
             </CardBody>
           </AccordionHeader>
-          <AccordionBody>
-            Edit data {/* Future implementation */}
+          <AccordionBody className= 'p-6'>
+            <Typography className="mb-1 text-left">Job Description</Typography>
+            <Typography className='font-semibold text-left'>{repairDescription}</Typography>
           </AccordionBody>
         </Accordion>
       </Card>

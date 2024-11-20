@@ -11,7 +11,6 @@ const RepairOrderContent = ({ repairOrder }) => {
     { key: 'vehicle', label: 'Vehicle' },
     { key: 'customerName', label: 'Customer Name' },
     { key: 'phone', label: 'Phone' },
-    { key: 'repairDescription', label: 'Repair Description' },
     { key: 'status', label: 'Status' }
   ];
 

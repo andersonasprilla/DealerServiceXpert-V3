@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import useAuthVerification from '../../middleware/useAuthVerification';
+import AddCustomerButton from './AddCustomerButton';
 import useDataFetching from '../../hooks/useDataFetching';
 import { getRepairOrders, getUsers } from '../../api/api';
 
@@ -41,13 +42,14 @@ const Infobar = () => {
   return (
     <div className="bg-white shadow-sm rounded-md p-4 ml-4"> 
 
-      <div className="flex items-center space-x-1 py-3 border-b border-gray-200">
+      <div className="flex items-center space-x-1 py-3 border-b border-gray-200 place-content-between">
         <span className="text-sm text-gray-600">
           {isManager ? 'Total Service Advisors:' : 'Open Orders:'}
         </span>
         <span className="text-lg font-semibold text-gray-800">
           {dataCount}
         </span>
+        <AddCustomerButton />
       </div>
     </div>
   );
