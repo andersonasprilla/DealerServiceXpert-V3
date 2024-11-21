@@ -15,8 +15,8 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: anderson0626/client1
-      context: client1
+    - image: anderson0626/client
+      context: client
       docker:
         dockerfile: Dockerfile
       sync:

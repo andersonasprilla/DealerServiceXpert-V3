@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../api/api';
+import { login } from '../../client/src/api/api';
 
 // Define a mapping of roles to their respective dashboard routes
 const ROLE_ROUTES = {
