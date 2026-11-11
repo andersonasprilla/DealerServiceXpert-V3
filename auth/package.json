@@ -4,14 +4,17 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node-dev --poll src/index.ts",
-    "test": "jest --watchAll --no-cache"
+    "test": "jest --watchAll --no-cache",
+    "test:security": "node --test test/mongoose-security.test.cjs",
+    "test:ci": "jest --runInBand --no-cache",
+    "typecheck": "tsc --noEmit"
   },
   "jest": {
     "preset": "ts-jest",
-    "test Evironment": "node",
     "setupFilesAfterEnv": [
       "./src/test/setup.ts"
-    ]
+    ],
+    "testEnvironment": "node"
   },
   "keywords": [],
   "author": "",
@@ -27,7 +30,7 @@
     "express-async-errors": "^3.1.1",
     "express-validator": "^7.2.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.8.1",
+    "mongoose": "^8.24.3",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.6.3"
   },

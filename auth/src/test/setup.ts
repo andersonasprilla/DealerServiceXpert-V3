@@ -7,16 +7,15 @@ declare global {
   var signin: () => Promise<string[]>;
 }
 
-let mongo: any;
+let mongo: MongoMemoryServer | undefined;
 beforeAll(async () => {
   process.env.JWT_KEY = "asdfasdf";
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-  const mongo = await MongoMemoryServer.create();
+  mongo = await MongoMemoryServer.create();
   const mongoUri = mongo.getUri();
 
   await mongoose.connect(mongoUri, {});
-});
+}, 120000);
 
 beforeEach(async () => {
   if (mongoose.connection.db) {
@@ -29,10 +28,10 @@ beforeEach(async () => {
 });
 
 afterAll(async () => {
+  await mongoose.connection.close();
   if (mongo) {
     await mongo.stop();
   }
-  await mongoose.connection.close();
 });
 
 global.signin = async () => {
