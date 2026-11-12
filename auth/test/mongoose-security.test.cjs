@@ -77,3 +77,85 @@ test('countDocuments preserves existing behavior when sanitization is disabled',
     .setOptions({ sanitizeFilter: false }).exec();
   assert.deepEqual(calls, [{ email: { $ne: null } }]);
 });
+
+
+// GHSA-gg4r-jv3p-qx3c: reproduce the disconnected Connection.config state
+// populated by connect/createConnection options. The auth integration tests
+// also exercise both real connection APIs against an isolated MongoDB.
+function connectionFixture(sanitizeFilter = true) {
+  const instance = new mongoose.Mongoose();
+  const connection = instance.createConnection();
+  connection.config.sanitizeFilter = sanitizeFilter;
+  const Model = connection.model('ConnectionSecurityRegression', new instance.Schema({
+    email: String,
+    metadata: instance.Schema.Types.Mixed
+  }));
+  const calls = [];
+  Model.collection.findOne = async filter => {
+    calls.push(filter);
+    return { email: 'advisor@example.com' };
+  };
+  Model.collection.find = filter => {
+    calls.push(filter);
+    return { toArray: async () => [] };
+  };
+  Model.collection.countDocuments = async filter => {
+    calls.push(filter);
+    return 2;
+  };
+  Model.collection.updateOne = async filter => {
+    calls.push(filter);
+    return { acknowledged: true, matchedCount: 1, modifiedCount: 1 };
+  };
+  Model.collection.deleteOne = async filter => {
+    calls.push(filter);
+    return { acknowledged: true, deletedCount: 1 };
+  };
+  return { instance, connection, Model, calls };
+}
+
+const connectionQueries = {
+  findOne: (Model, filter) => Model.findOne(filter).lean(),
+  find: (Model, filter) => Model.find(filter).lean(),
+  countDocuments: (Model, filter) => Model.countDocuments(filter),
+  exists: (Model, filter) => Model.exists(filter),
+  updateOne: (Model, filter) => Model.updateOne(filter, { $set: { email: 'updated@example.com' } }),
+  deleteOne: (Model, filter) => Model.deleteOne(filter)
+};
+
+for (const [operation, query] of Object.entries(connectionQueries)) {
+  test(`${operation} honors connection-level sanitizeFilter`, async () => {
+    const { connection, Model, calls } = connectionFixture();
+    assert.equal(connection.get('sanitizeFilter'), true);
+    await assert.rejects(
+      query(Model, { email: { $ne: null } }).exec(),
+      error => error instanceof mongoose.Error.CastError && error.path === 'email'
+    );
+    assert.equal(calls.length, 0, 'An unsafe selector must not reach MongoDB');
+  });
+}
+
+test('connection sanitization preserves ordinary filters', async () => {
+  const { Model, calls } = connectionFixture();
+  await Model.findOne({ email: 'advisor@example.com' }).lean().exec();
+  assert.deepEqual(calls, [{ email: 'advisor@example.com' }]);
+});
+
+test('connection sanitization treats operator-shaped Mixed values literally', async () => {
+  const { Model, calls } = connectionFixture();
+  await Model.findOne({ metadata: { $ne: null } }).lean().exec();
+  assert.deepEqual(calls, [{ metadata: { $eq: { $ne: null } } }]);
+});
+
+test('connection sanitization preserves explicitly trusted selectors', async () => {
+  const { instance, Model, calls } = connectionFixture();
+  await Model.findOne({ email: instance.trusted({ $in: ['advisor@example.com'] }) }).lean().exec();
+  assert.deepEqual(calls[0].email.$in, ['advisor@example.com']);
+  assert.equal(Object.hasOwn(calls[0].email, '$eq'), false);
+});
+
+test('disabled connection sanitization preserves existing query behavior', async () => {
+  const { Model, calls } = connectionFixture(false);
+  await Model.findOne({ email: { $ne: null } }).lean().exec();
+  assert.deepEqual(calls, [{ email: { $ne: null } }]);
+});
